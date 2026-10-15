@@ -1,0 +1,50 @@
+{
+  "name": "bhumisetu-backend",
+  "version": "1.0.0",
+  "description": "Production Node.js Backend for BhumiSetu - Intelligent Land Record Digitization and Validation System",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "worker": "node src/workers/document.worker.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --forceExit",
+    "migrate": "node src/db/migrate.js"
+  },
+  "keywords": [
+    "land-records",
+    "sih",
+    "ocr",
+    "huggingface",
+    "postgis",
+    "dilrmp",
+    "ulpin"
+  ],
+  "author": "GIT_HAPPENSS",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.750.0",
+    "@aws-sdk/s3-request-presigner": "^3.750.0",
+    "@prisma/client": "^6.19.3",
+    "@turf/turf": "^7.2.0",
+    "axios": "^1.7.9",
+    "bcryptjs": "^2.4.3",
+    "bullmq": "^5.41.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.1",
+    "sharp": "^0.33.5",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "prisma": "^6.19.3",
+    "supertest": "^7.0.0"
+  }
+}

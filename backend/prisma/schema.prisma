@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TEHSILDAR
+  PATWARI
+  CITIZEN
+}
+
+enum DocumentStatus {
+  UPLOADED
+  PREPROCESSING
+  INFERENCE
+  VALIDATING
+  READY_FOR_REVIEW
+  VERIFIED
+  REJECTED
+  FAILED
+}
+
+enum ReviewStatus {
+  PENDING_REVIEW
+  IN_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum ValidationStatus {
+  PASS
+  WARNING
+  FAIL
+}
+
+enum FieldStatus {
+  UNVERIFIED
+  ACCEPTED
+  CORRECTED
+  REJECTED
+}
+
+model User {
+  id              String       @id @default(uuid()) @db.Uuid
+  email           String       @unique @db.VarChar(255)
+  passwordHash    String       @map("password_hash") @db.VarChar(255)
+  name            String       @db.VarChar(255)
+  role            Role
+  department      String?      @db.VarChar(100)
+  stateLgdCode    String?      @map("state_lgd_code") @db.VarChar(20)
+  districtLgdCode String?      @map("district_lgd_code") @db.VarChar(20)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  uploadedDocuments Document[]    @relation("UploadedBy")
+  lockedRecords     LandRecord[]  @relation("LockedBy")
+  verifiedRecords   LandRecord[]  @relation("VerifiedBy")
+  auditLogs         AuditLog[]
+
+  @@map("users")
+}
+
+model Document {
+  id                String         @id @default(uuid()) @db.Uuid
+  originalFilename  String         @map("original_filename") @db.VarChar(255)
+  mimeType          String         @map("mime_type") @db.VarChar(100)
+  fileSizeBytes     BigInt         @map("file_size_bytes")
+  sha256Hash        String         @unique @map("sha256_hash") @db.VarChar(64)
+  s3Key             String         @map("s3_key") @db.VarChar(500)
+  preprocessedS3Key String?        @map("preprocessed_s3_key") @db.VarChar(500)
+  status            DocumentStatus @default(UPLOADED)
+  errorMessage      String?        @map("error_message") @db.Text
+  uploadedById      String?        @map("uploaded_by") @db.Uuid
+  metadata          Json           @default("{}") @db.JsonB
+  createdAt         DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  uploadedBy  User?        @relation("UploadedBy", fields: [uploadedById], references: [id])
+  landRecords LandRecord[]
+
+  @@map("documents")
+}
+
+model LandRecord {
+  id                     String       @id @default(uuid()) @db.Uuid
+  documentId             String       @map("document_id") @db.Uuid
+  stateLgd               String       @map("state_lgd") @db.VarChar(20)
+  districtLgd            String       @map("district_lgd") @db.VarChar(20)
+  subdistrictLgd         String       @map("subdistrict_lgd") @db.VarChar(20)
+  villageLgd             String       @map("village_lgd") @db.VarChar(20)
+  villageName            String?      @map("village_name") @db.VarChar(255)
+  surveyNumber           String       @map("survey_number") @db.VarChar(100)
+  subdivisionNumber      String?      @map("subdivision_number") @db.VarChar(100)
+  ulpin                  String?      @db.VarChar(14)
+  rawArea                Decimal?     @map("raw_area") @db.Decimal(15, 4)
+  rawUnit                String?      @map("raw_unit") @db.VarChar(50)
+  normalizedAreaSqm      Decimal?     @map("normalized_area_sqm") @db.Decimal(15, 4)
+  normalizedAreaHectares Decimal?     @map("normalized_area_hectares") @db.Decimal(15, 6)
+  unitConversionMetadata Json?        @default("{}") @map("unit_conversion_metadata") @db.JsonB
+  landClassification     String?      @map("land_classification") @db.VarChar(100)
+  owners                 Json         @default("[]") @db.JsonB
+  overallConfidence      Decimal?     @default(0.0) @map("overall_confidence") @db.Decimal(5, 4)
+  reviewPriorityScore    Decimal?     @default(1.0) @map("review_priority_score") @db.Decimal(5, 4)
+  reviewStatus           ReviewStatus @default(PENDING_REVIEW) @map("review_status")
+  lockedById             String?      @map("locked_by") @db.Uuid
+  lockedAt               DateTime?    @map("locked_at") @db.Timestamptz
+  verifiedById           String?      @map("verified_by") @db.Uuid
+  verifiedAt             DateTime?    @map("verified_at") @db.Timestamptz
+  createdAt              DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt              DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  document         Document          @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  lockedBy         User?             @relation("LockedBy", fields: [lockedById], references: [id])
+  verifiedBy       User?             @relation("VerifiedBy", fields: [verifiedById], references: [id])
+  fieldExtractions FieldExtraction[]
+  parcelGeometries ParcelGeometry[]
+  auditLogs        AuditLog[]
+
+  @@index([villageLgd, surveyNumber])
+  @@index([reviewPriorityScore(sort: Desc)])
+  @@map("land_records")
+}
+
+model ParcelGeometry {
+  id                 String   @id @default(uuid()) @db.Uuid
+  recordId           String   @map("record_id") @db.Uuid
+  calculatedAreaSqm  Decimal? @map("calculated_area_sqm") @db.Decimal(15, 4)
+  isValidGeometry    Boolean  @default(true) @map("is_valid_geometry")
+  overlapWarning     Boolean  @default(false) @map("overlap_warning")
+  properties         Json     @default("{}") @db.JsonB
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  record LandRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@map("parcel_geometries")
+}
+
+model FieldExtraction {
+  id                    String           @id @default(uuid()) @db.Uuid
+  recordId              String           @map("record_id") @db.Uuid
+  fieldName             String           @map("field_name") @db.VarChar(100)
+  aiExtractedValue      String?          @map("ai_extracted_value") @db.Text
+  aiConfidence          Decimal?         @map("ai_confidence") @db.Decimal(5, 4)
+  boundingBox           Json?            @map("bounding_box") @db.JsonB
+  ruleValidationStatus  ValidationStatus @default(PASS) @map("rule_validation_status")
+  ruleValidationMessage String?          @map("rule_validation_message") @db.Text
+  humanVerifiedValue    String?          @map("human_verified_value") @db.Text
+  status                FieldStatus      @default(UNVERIFIED)
+  correctionReason      String?          @map("correction_reason") @db.Text
+  createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  record LandRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@map("field_extractions")
+}
+
+model AuditLog {
+  id             String    @id @default(uuid()) @db.Uuid
+  sequenceNumber BigInt    @unique @default(autoincrement()) @map("sequence_number")
+  recordId       String?   @map("record_id") @db.Uuid
+  action         String    @db.VarChar(100)
+  actorId        String?   @map("actor_id") @db.Uuid
+  actorRole      String?   @map("actor_role") @db.VarChar(50)
+  prevHash       String    @map("prev_hash") @db.VarChar(64)
+  currHash       String    @map("curr_hash") @db.VarChar(64)
+  delta          Json      @db.JsonB
+  timestamp      DateTime  @default(now()) @db.Timestamptz
+
+  record LandRecord? @relation(fields: [recordId], references: [id], onDelete: SetNull)
+  actor  User?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([sequenceNumber])
+  @@map("audit_logs")
+}
