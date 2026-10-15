@@ -6,7 +6,7 @@ const server = app.listen(config.port, () => {
   console.log('================================================================');
   console.log(`🚀 BhumiSetu Backend Service Running on http://localhost:${config.port}`);
   console.log(`📡 Environment: ${config.nodeEnv}`);
-  console.log(`🤖 AI Inference Mode: ${config.useHfMock ? 'Deterministic Mock' : 'Hugging Face Endpoint'}`);
+  console.log(`🤖 AI Engine Mode: ${config.aiMode} (${config.aiMode === 'LLM' ? config.geminiModel : config.hfEndpointUrl})`);
   console.log(`🗺️ PostGIS Database URL: ${config.databaseUrl}`);
   console.log('================================================================');
 });
