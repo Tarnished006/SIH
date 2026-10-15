@@ -3,7 +3,7 @@ import prisma from '../config/prisma.js';
 import { redisConnection } from '../config/redis.js';
 import { getObjectBuffer, uploadBuffer } from '../config/s3.js';
 import { preprocessScan } from '../services/preprocessing/image.processor.js';
-import { queryHFModel } from '../services/huggingface/hf.client.js';
+import { extractLandRecord } from '../services/ai/ai.service.js';
 import { convertLandArea } from '../services/validation/unitConverter.js';
 import { generateProvisionalULPIN } from '../services/validation/ulpin.js';
 import { runComprehensiveValidation } from '../services/validation/rulesEngine.js';
@@ -36,13 +36,13 @@ export const processDocumentPipeline = async (jobData) => {
       data: { preprocessedS3Key: preprocessedKey },
     });
 
-    // 3. Hugging Face Model Inference
+    // 3. AI Model Inference (Dual Mode: Vision LLM / Fine-Tuned Model)
     await prisma.document.update({
       where: { id: documentId },
       data: { status: 'INFERENCE' },
     });
-    const hfResult = await queryHFModel(preprocessed.processedBuffer, originalFilename);
-    const extracted = hfResult.extractedData;
+    const aiResult = await extractLandRecord(preprocessed.processedBuffer, originalFilename);
+    const extracted = aiResult.extractedData;
 
     // 4. Multi-Region Land Unit Normalization
     await prisma.document.update({
@@ -138,13 +138,26 @@ export const processDocumentPipeline = async (jobData) => {
         normalizedAreaHectares: unitConversion.normalizedAreaHectares,
         reviewPriorityScore: docScore.reviewPriorityScore,
         validationFlags: validationResults.flags,
+        aiEngine: aiResult.engineUsed,
+        detectedLanguage: extracted.detectedLanguage || 'Hindi',
+        documentType: extracted.documentType || 'Land Record',
       },
     });
 
-    // 11. Finalize Document Status
+    // 11. Finalize Document Status and attach AI detection metadata
     await prisma.document.update({
       where: { id: documentId },
-      data: { status: 'READY_FOR_REVIEW' },
+      data: {
+        status: 'READY_FOR_REVIEW',
+        metadata: {
+          detectedLanguage: extracted.detectedLanguage || 'Hindi',
+          documentType: extracted.documentType || 'Land Record',
+          aiEngine: aiResult.engineUsed,
+          rawExtractedText: extracted.rawExtractedText || '',
+          stateLgd: extracted.stateLgd || stateLgd,
+          districtLgd: extracted.districtLgd || districtLgd,
+        },
+      },
     });
 
     console.log(`[PIPELINE_COMPLETE] Document ${documentId} processed successfully. Record ID: ${recordId}. Priority: ${docScore.reviewPriorityScore}`);

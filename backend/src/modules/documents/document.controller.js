@@ -104,10 +104,69 @@ export const getDocumentsList = async (req, res, next) => {
   }
 };
 
+/**
+ * Direct Synchronous Document Analysis (Useful for testing & rapid inspection)
+ */
+export const analyzeDirect = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No document file uploaded. Field name must be "document".' });
+    }
+
+    const { preprocessScan } = await import('../../services/preprocessing/image.processor.js');
+    const { extractLandRecord } = await import('../../services/ai/ai.service.js');
+    const { convertLandArea } = await import('../../services/validation/unitConverter.js');
+    const { runComprehensiveValidation } = await import('../../services/validation/rulesEngine.js');
+
+    // 1. Sharp Preprocessing
+    const preprocessed = await preprocessScan(req.file.buffer);
+
+    // 2. AI Extraction (Vision LLM or Local Model)
+    const aiResult = await extractLandRecord(preprocessed.processedBuffer, req.file.originalname, req.file.mimetype);
+    const extracted = aiResult.extractedData;
+
+    // 3. Multi-Region Land Unit Normalization
+    const unitConversion = convertLandArea(
+      extracted.rawArea,
+      extracted.rawUnit,
+      extracted.stateLgd || '09',
+      extracted.districtLgd || '140'
+    );
+
+    // 4. Comprehensive Rule Validation
+    const validation = runComprehensiveValidation({
+      surveyNumber: extracted.surveyNumber,
+      owners: extracted.owners,
+      normalizedAreaSqm: unitConversion.normalizedAreaSqm,
+      isAmbiguousUnit: unitConversion.isAmbiguous,
+    });
+
+    res.json({
+      success: true,
+      originalFilename: req.file.originalname,
+      aiEngine: aiResult.engineUsed,
+      mode: aiResult.mode,
+      detectedLanguage: extracted.detectedLanguage,
+      documentType: extracted.documentType,
+      extractedData: {
+        ...extracted,
+        normalizedAreaSqm: unitConversion.normalizedAreaSqm,
+        normalizedAreaHectares: unitConversion.normalizedAreaHectares,
+        unitConversion,
+      },
+      validation,
+      inferenceTimeMs: aiResult.totalTimeMs || aiResult.inferenceTimeMs,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   uploadDocument,
   requestUploadSlot,
   finalizeUpload,
   getDocument,
   getDocumentsList,
+  analyzeDirect,
 };

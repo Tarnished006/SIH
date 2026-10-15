@@ -7,7 +7,15 @@ export const config = {
   databaseUrl: process.env.DATABASE_URL || 'postgresql://bhumisetu_user:bhumisetu_password@localhost:5432/bhumisetu_db',
   redisUrl: process.env.REDIS_URL || 'redis://localhost:6379',
   
-  // Hugging Face AI Endpoints
+  // AI Engine Configuration (Dual Mode: 'LLM' | 'LOCAL_MODEL' | 'HYBRID' | 'MOCK')
+  aiMode: (process.env.AI_MODE || 'LLM').toUpperCase(),
+  hybridThreshold: parseFloat(process.env.HYBRID_CONFIDENCE_THRESHOLD || '0.70'),
+
+  // Google Gemini Vision Intelligence
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+
+  // Hugging Face AI Endpoints (Fine-Tuned Model)
   hfApiKey: process.env.HUGGINGFACE_API_KEY || '',
   hfEndpointUrl: process.env.HUGGINGFACE_ENDPOINT_URL || 'https://api-inference.huggingface.co/models/microsoft/trocr-base-stage1',
   useHfMock: process.env.USE_HF_MOCK === 'true',
