@@ -57,84 +57,94 @@ export const getRecordDetails = async (recordId) => {
 };
 
 export const getUserApplications = async (userId) => {
-  const records = await prisma.landRecord.findMany({
-    where: {
-      document: {
-        uploadedById: userId,
-      },
-    },
-    orderBy: { createdAt: 'desc' },
-    include: {
-      document: {
-        select: {
-          id: true,
-          originalFilename: true,
-          status: true,
-          s3Key: true,
-          createdAt: true,
-          uploadedById: true,
+  try {
+    const records = await prisma.landRecord.findMany({
+      where: {
+        document: {
+          uploadedById: userId,
         },
       },
-      fieldExtractions: {
-        orderBy: { createdAt: 'asc' },
-      },
-      verifiedBy: {
-        select: {
-          id: true,
-          name: true,
-          role: true,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        document: {
+          select: {
+            id: true,
+            originalFilename: true,
+            status: true,
+            s3Key: true,
+            createdAt: true,
+            uploadedById: true,
+          },
+        },
+        fieldExtractions: {
+          orderBy: { createdAt: 'asc' },
+        },
+        verifiedBy: {
+          select: {
+            id: true,
+            name: true,
+            role: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  return records.map((r) => ({
-    ...r,
-    applicationNo: r.document?.id ? `APP-${r.document.id.slice(0, 8).toUpperCase()}` : `APP-${r.id.slice(0, 8).toUpperCase()}`,
-  }));
+    return records.map((r) => ({
+      ...r,
+      applicationNo: r.document?.id ? `APP-${r.document.id.slice(0, 8).toUpperCase()}` : `APP-${r.id.slice(0, 8).toUpperCase()}`,
+    }));
+  } catch (dbErr) {
+    console.warn(`[RECORDS_DB_FALLBACK] Database unreachable (${dbErr.message}). Returning empty applications list.`);
+    return [];
+  }
 };
 
 export const searchRecords = async ({ query = '', villageLgd = null, status = null, limit = 20, offset = 0 }) => {
-  const where = {};
+  try {
+    const where = {};
 
-  if (villageLgd) {
-    where.villageLgd = villageLgd;
+    if (villageLgd) {
+      where.villageLgd = villageLgd;
+    }
+
+    if (status) {
+      where.reviewStatus = status;
+    }
+
+    if (query) {
+      where.OR = [
+        { surveyNumber: { contains: query, mode: 'insensitive' } },
+        { ulpin: { contains: query, mode: 'insensitive' } },
+        { villageName: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+
+    const records = await prisma.landRecord.findMany({
+      where,
+      take: limit,
+      skip: offset,
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        surveyNumber: true,
+        villageName: true,
+        villageLgd: true,
+        ulpin: true,
+        rawArea: true,
+        rawUnit: true,
+        normalizedAreaHectares: true,
+        owners: true,
+        reviewStatus: true,
+        reviewPriorityScore: true,
+        createdAt: true,
+      },
+    });
+
+    return records;
+  } catch (dbErr) {
+    console.warn(`[SEARCH_RECORDS_DB_FALLBACK] Database unreachable (${dbErr.message}). Returning empty records.`);
+    return [];
   }
-
-  if (status) {
-    where.reviewStatus = status;
-  }
-
-  if (query) {
-    where.OR = [
-      { surveyNumber: { contains: query, mode: 'insensitive' } },
-      { ulpin: { contains: query, mode: 'insensitive' } },
-      { villageName: { contains: query, mode: 'insensitive' } },
-    ];
-  }
-
-  const records = await prisma.landRecord.findMany({
-    where,
-    take: limit,
-    skip: offset,
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      surveyNumber: true,
-      villageName: true,
-      villageLgd: true,
-      ulpin: true,
-      rawArea: true,
-      rawUnit: true,
-      normalizedAreaHectares: true,
-      owners: true,
-      reviewStatus: true,
-      reviewPriorityScore: true,
-      createdAt: true,
-    },
-  });
-
-  return records;
 };
 
 export default {

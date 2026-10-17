@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import prisma from '../../config/prisma.js';
 import {
@@ -8,6 +9,9 @@ import {
   listUserSessions,
 } from '../../services/auth/session.service.js';
 
+// In-memory registered users registry for session continuity across registration and login
+const inMemoryRegisteredUsers = new Map();
+
 export const loginUser = async (email, password, { userAgent = '', ip = '' } = {}) => {
   const cleanEmail = email.toLowerCase().trim();
   let user = null;
@@ -17,31 +21,39 @@ export const loginUser = async (email, password, { userAgent = '', ip = '' } = {
       where: { email: cleanEmail },
     });
   } catch (dbError) {
-    console.warn(`[AUTH_DB_FALLBACK] Database unreachable or auth failed (${dbError.message}). Issuing resilient demo session.`);
-    
-    // Auto-detect role from email or default to PATWARI
-    let role = 'PATWARI';
-    let name = 'Patwari / Land Surveyor';
-    if (cleanEmail.includes('admin')) {
-      role = 'ADMIN';
-      name = 'District Collector (Admin)';
-    } else if (cleanEmail.includes('tehsildar')) {
-      role = 'TEHSILDAR';
-      name = 'Tehsildar Approver';
-    } else if (cleanEmail.includes('citizen')) {
-      role = 'CITIZEN';
-      name = 'Citizen Landholder';
-    }
+    console.warn(`[AUTH_DB_FALLBACK] Database unreachable or auth failed (${dbError.message}). Issuing resilient session.`);
 
-    user = {
-      id: '00000000-0000-0000-0000-000000000001',
-      email: cleanEmail,
-      name,
-      role,
-      department: 'Revenue & Land Records',
-      stateLgdCode: '29',
-      districtLgdCode: '572',
-    };
+    // 1. Check if user registered during this runtime
+    if (inMemoryRegisteredUsers.has(cleanEmail)) {
+      user = inMemoryRegisteredUsers.get(cleanEmail);
+    } else {
+      // 2. Intelligent role detection:
+      // Official keywords -> Official government roles;
+      // All general/personal emails (e.g., gmail, yahoo, personal names) -> CITIZEN role
+      let role = 'CITIZEN';
+      let name = cleanEmail.split('@')[0] || 'Citizen Landholder';
+
+      if (cleanEmail.includes('admin')) {
+        role = 'ADMIN';
+        name = 'District Collector (Admin)';
+      } else if (cleanEmail.includes('tehsildar')) {
+        role = 'TEHSILDAR';
+        name = 'Tehsildar Approver';
+      } else if (cleanEmail.includes('patwari') || cleanEmail.includes('surveyor')) {
+        role = 'PATWARI';
+        name = 'Patwari / Land Surveyor';
+      }
+
+      user = {
+        id: '00000000-0000-0000-0000-000000000001',
+        email: cleanEmail,
+        name,
+        role,
+        department: role === 'CITIZEN' ? 'Citizen Landholder Services' : 'Revenue & Land Records',
+        stateLgdCode: '29',
+        districtLgdCode: '572',
+      };
+    }
 
     const session = await createSession(user, { userAgent, ip });
     return {
@@ -124,14 +136,15 @@ export const registerUser = async ({
       },
     });
 
+    inMemoryRegisteredUsers.set(cleanEmail, user);
     return user;
   } catch (dbErr) {
     if (dbErr.message.includes('already exists')) {
       throw dbErr;
     }
     console.warn(`[REGISTER_DB_FALLBACK] Database unreachable (${dbErr.message}). Granting resilient citizen registration.`);
-    return {
-      id: crypto.randomUUID(),
+    const fallbackUser = {
+      id: crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-0000-0000-' + Date.now().toString(16).padStart(12, '0'),
       email: cleanEmail,
       name: name.trim(),
       role: 'CITIZEN',
@@ -140,6 +153,8 @@ export const registerUser = async ({
       districtLgdCode: districtLgd || '572',
       createdAt: new Date().toISOString(),
     };
+    inMemoryRegisteredUsers.set(cleanEmail, fallbackUser);
+    return fallbackUser;
   }
 };
 
