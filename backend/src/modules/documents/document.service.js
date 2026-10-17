@@ -199,8 +199,11 @@ export const getDocumentById = async (documentId) => {
   };
 };
 
-export const listDocuments = async ({ limit = 20, offset = 0, status = null }) => {
-  const where = status ? { status } : {};
+export const listDocuments = async ({ limit = 20, offset = 0, status = null, uploadedById = null }) => {
+  const where = {};
+  if (status) where.status = status;
+  if (uploadedById) where.uploadedById = uploadedById;
+
   const docs = await prisma.document.findMany({
     where,
     take: limit,

@@ -8,6 +8,6 @@ const router = Router();
 router.use(authenticateJWT);
 
 router.get('/record/:recordId', getRecordAuditHistory);
-router.get('/verify-chain', requireRoles('ADMIN', 'TEHSILDAR'), verifyFullLedgerChain);
+router.get('/verify-chain', requireRoles('TEHSILDAR'), verifyFullLedgerChain);
 
 export default router;

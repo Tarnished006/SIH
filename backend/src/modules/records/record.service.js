@@ -6,9 +6,21 @@ export const getRecordDetails = async (recordId) => {
     include: {
       document: {
         select: {
+          id: true,
           originalFilename: true,
           s3Key: true,
           preprocessedS3Key: true,
+          uploadedById: true,
+          mimeType: true,
+          status: true,
+          createdAt: true,
+        },
+      },
+      verifiedBy: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
         },
       },
       fieldExtractions: {
@@ -36,11 +48,50 @@ export const getRecordDetails = async (recordId) => {
 
   return {
     ...record,
+    applicationNo: record.document?.id ? `APP-${record.document.id.slice(0, 8).toUpperCase()}` : `APP-${record.id.slice(0, 8).toUpperCase()}`,
     auditLogs: record.auditLogs.map((log) => ({
       ...log,
       sequenceNumber: Number(log.sequenceNumber),
     })),
   };
+};
+
+export const getUserApplications = async (userId) => {
+  const records = await prisma.landRecord.findMany({
+    where: {
+      document: {
+        uploadedById: userId,
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      document: {
+        select: {
+          id: true,
+          originalFilename: true,
+          status: true,
+          s3Key: true,
+          createdAt: true,
+          uploadedById: true,
+        },
+      },
+      fieldExtractions: {
+        orderBy: { createdAt: 'asc' },
+      },
+      verifiedBy: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
+    },
+  });
+
+  return records.map((r) => ({
+    ...r,
+    applicationNo: r.document?.id ? `APP-${r.document.id.slice(0, 8).toUpperCase()}` : `APP-${r.id.slice(0, 8).toUpperCase()}`,
+  }));
 };
 
 export const searchRecords = async ({ query = '', villageLgd = null, status = null, limit = 20, offset = 0 }) => {

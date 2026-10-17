@@ -1,0 +1,2865 @@
+/* ==========================================================================
+   BhumiSetu (ಭೂಮಿಸೇತು) Master Design System
+   Visual Language inspired by Google Stitch Land Governance Designs
+   Colors: Warm Ivory, Forest Pine Green, Muted Stone, Restrained Brass, Charcoal
+   ========================================================================== */
+
+:root {
+  /* Light Theme (Default) */
+  --bg-app: #f4f6f0;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #fafbf8;
+  --bg-subtle: #ecefe6;
+  --bg-card-highlight: #e8ede1;
+  --bg-accent-soft: #fcf6e8;
+  --bg-banner: #f9f8f2;
+  
+  --text-primary: #152219;
+  --text-secondary: #4a594e;
+  --text-muted: #738276;
+  --text-inverse: #f4f6f0;
+
+  --color-primary: #163323;
+  --color-primary-hover: #1f4731;
+  --color-primary-active: #0f2419;
+  --color-primary-subtle: rgba(22, 51, 35, 0.08);
+
+  --color-brass: #d4a353;
+  --color-brass-light: #f5dfb8;
+  --color-brass-dark: #9b722d;
+
+  --color-danger: #c84b31;
+  --color-danger-subtle: #fbeee9;
+  --color-warning: #d97706;
+  --color-warning-subtle: #fef3c7;
+  --color-success: #15803d;
+  --color-success-subtle: #dcfce7;
+  --color-info: #0284c7;
+  --color-info-subtle: #e0f2fe;
+
+  --border-subtle: rgba(22, 51, 35, 0.12);
+  --border-strong: rgba(22, 51, 35, 0.24);
+  --border-card: rgba(22, 51, 35, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(22, 51, 35, 0.04);
+  --shadow-md: 0 4px 12px rgba(22, 51, 35, 0.06), 0 1px 3px rgba(22, 51, 35, 0.03);
+  --shadow-lg: 0 10px 25px -5px rgba(22, 51, 35, 0.08), 0 8px 10px -6px rgba(22, 51, 35, 0.04);
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-full: 9999px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-kannada: 'Noto Sans Kannada', 'Tunga', 'Segoe UI', sans-serif;
+  --font-heading: 'Outfit', 'Noto Sans Kannada', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --nav-height: 60px;
+  --bottom-nav-height: 64px;
+}
+
+/* Dark Theme Overrides */
+[data-theme='dark'] {
+  --bg-app: #121714;
+  --bg-surface: #1b231f;
+  --bg-surface-elevated: #232d28;
+  --bg-subtle: #171e1a;
+  --bg-card-highlight: #28342e;
+  --bg-accent-soft: #2a2c24;
+  --bg-banner: #1f2722;
+
+  --text-primary: #ecf0ed;
+  --text-secondary: #a9b7ad;
+  --text-muted: #748378;
+  --text-inverse: #121714;
+
+  --color-primary: #2d5a41;
+  --color-primary-hover: #386f50;
+  --color-primary-active: #20422f;
+  --color-primary-subtle: rgba(45, 90, 65, 0.25);
+
+  --color-brass: #e4b869;
+  --color-brass-light: #524227;
+  --color-brass-dark: #f8cf85;
+
+  --color-danger: #ea654c;
+  --color-danger-subtle: #3a1f1a;
+  --color-warning: #f59e0b;
+  --color-warning-subtle: #3d2f10;
+  --color-success: #22c55e;
+  --color-success-subtle: #13331f;
+  --color-info: #38bdf8;
+  --color-info-subtle: #142a38;
+
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --border-card: rgba(255, 255, 255, 0.08);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.45);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Apply Kannada font when lang is kn */
+[lang="kn"] {
+  font-family: var(--font-kannada);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Focus styles for accessible keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 2px;
+}
+
+/* Monospace Helpers */
+.font-mono {
+  font-family: var(--font-mono);
+  letter-spacing: -0.02em;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--bg-app);
+}
+
+.app-main-area {
+  width: 100%;
+  max-width: 640px; /* Mobile frame width matching Stitch mobile screenshots */
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--bg-app);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+}
+
+/* Base visibility defaults (Mobile first) */
+.desktop-sidebar {
+  display: none;
+}
+
+.desktop-only-topbar {
+  display: none;
+}
+
+.mobile-only-header {
+  display: block;
+}
+
+.mobile-only-bottomnav {
+  display: block;
+}
+
+.desktop-table-container {
+  display: none;
+}
+
+.mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-content-split {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.workbench-split-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gis-desktop-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.desktop-system-health-card {
+  display: none;
+}
+
+.main-content {
+  flex: 1;
+  padding: 14px 16px;
+  padding-bottom: calc(var(--bottom-nav-height) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top App Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  backdrop-filter: blur(8px);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-emblem {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brass);
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-text h1 {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brand-text .brand-subtitle {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-btn {
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.toggle-btn:hover {
+  background-color: var(--bg-card-highlight);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.user-avatar-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1.5px solid var(--color-brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: var(--color-brass-light);
+}
+
+.user-avatar-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bottom Navigation Bar */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 640px;
+  height: var(--bottom-nav-height);
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+  padding: 0 8px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+}
+
+@media (min-width: 1024px) {
+  .bottom-nav.desktop-expanded {
+    max-width: 1200px;
+  }
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 6px 10px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  min-width: 58px;
+}
+
+.bottom-nav-item:hover {
+  color: var(--text-primary);
+}
+
+.bottom-nav-item.active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+[data-theme='dark'] .bottom-nav-item.active {
+  color: var(--color-brass);
+}
+
+.bottom-nav-item.active svg {
+  stroke-width: 2.4;
+}
+
+/* ==========================================================================
+   Cards & Surfaces
+   ========================================================================== */
+.card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+}
+
+.card-elevated {
+  background-color: var(--bg-surface-elevated);
+  box-shadow: var(--shadow-md);
+}
+
+/* Officer Tehsildar Banner */
+.officer-banner {
+  background-color: var(--bg-banner);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.banner-top-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-success);
+  margin-right: 5px;
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+.officer-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.officer-role {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.jurisdiction-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Metric Stats Grid (2x2) */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.metric-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-icon-box {
+  color: var(--text-secondary);
+}
+
+.metric-number {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.metric-number .metric-unit {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.metric-label-kn {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Badges & Tags */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: var(--font-mono);
+}
+
+.badge-urgent {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+[data-theme='dark'] .badge-urgent {
+  background-color: #3b1414;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+.badge-sync {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.badge-flagged {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badge-immutable {
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.badge-amber {
+  background-color: var(--color-brass-light);
+  color: var(--color-brass-dark);
+  border: 1px solid var(--color-brass);
+}
+
+[data-theme='dark'] .badge-amber {
+  background-color: #3b2d13;
+  color: #f6d186;
+  border-color: #8c6823;
+}
+
+.badge-success {
+  background-color: var(--color-success-subtle);
+  color: var(--color-success);
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
+
+/* Administrative Action Buttons Grid */
+.actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-hint {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.action-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.action-card-btn {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-card-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-brass);
+  box-shadow: var(--shadow-md);
+  background-color: var(--bg-surface-elevated);
+}
+
+.action-btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-subtle);
+  color: var(--color-primary);
+  transition: background-color 0.15s ease;
+}
+
+[data-theme='dark'] .action-btn-icon {
+  background-color: var(--bg-card-highlight);
+  color: var(--color-brass);
+}
+
+.action-card-btn:hover .action-btn-icon {
+  background-color: var(--color-primary);
+  color: var(--color-brass);
+}
+
+.action-btn-text {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.15;
+}
+
+.action-btn-sub {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Cadastral Grid Active Layer Preview */
+.cadastral-preview-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastral-card-header {
+  padding: 8px 12px;
+  background-color: var(--bg-banner);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cadastral-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  background-color: #e5ebde;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .cadastral-canvas-wrap {
+  background-color: #17211b;
+}
+
+.cadastral-strip-footer {
+  padding: 8px 12px;
+  background-color: #212924;
+  color: #f4f6f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+}
+
+.cadastral-strip-footer a, .cadastral-strip-footer button {
+  color: var(--color-brass);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Queue List Items */
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.queue-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.queue-card:hover {
+  border-color: var(--color-brass);
+  box-shadow: var(--shadow-md);
+}
+
+.queue-seq {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.queue-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.queue-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.queue-survey {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.queue-village {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.queue-ulpin {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-secondary);
+}
+
+.queue-subtext {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-action-btn {
+  padding: 6px 12px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+[data-theme='dark'] .queue-action-btn {
+  background-color: var(--bg-card-highlight);
+  border: 1px solid var(--color-brass);
+  color: var(--color-brass);
+}
+
+.queue-action-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Cryptographic Audit Ledger Card */
+.ledger-audit-card {
+  background-color: #16241c;
+  color: #ecf0ed;
+  border: 1px solid rgba(212, 163, 83, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.ledger-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ledger-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-brass);
+}
+
+.ledger-desc {
+  font-size: 10.5px;
+  color: #a4b5aa;
+  line-height: 1.4;
+}
+
+.hash-box {
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hash-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--color-brass);
+  text-transform: uppercase;
+}
+
+.hash-code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #d1ded5;
+  word-break: break-all;
+  line-height: 1.35;
+}
+
+.ledger-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+}
+
+.verify-token-btn {
+  background-color: transparent;
+  border: 1px solid var(--color-brass);
+  color: var(--color-brass);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.verify-token-btn:hover {
+  background-color: var(--color-brass);
+  color: #121714;
+}
+
+/* Active Surveyors Chips */
+.surveyors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.surveyor-chip {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.surveyor-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-xs);
+  background-color: #d8ded4;
+  color: #27362d;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .surveyor-avatar {
+  background-color: #2c3831;
+  color: #d8ded4;
+}
+
+.surveyor-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.surveyor-name {
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.surveyor-zone {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   Review Workbench (Split Screen & Inspection)
+   ========================================================================== */
+.workbench-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--bg-banner);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+
+.workbench-survey-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.workbench-survey-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.view-mode-tabs {
+  display: flex;
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  border: 1px solid var(--border-subtle);
+}
+
+.view-mode-tab {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.view-mode-tab.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme='dark'] .view-mode-tab.active {
+  background-color: var(--bg-surface-elevated);
+  color: var(--color-brass);
+  border: 1px solid var(--color-brass);
+}
+
+/* RTC Extracted Form Grid */
+.rtc-document-sheet {
+  background-color: #faf8f2;
+  border: 1px solid rgba(180, 150, 100, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #2c2518;
+  position: relative;
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .rtc-document-sheet {
+  background-color: #1e2420;
+  color: #e5ece6;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.rtc-title {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+
+[data-theme='dark'] .rtc-title {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.rtc-fields-table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.rtc-cell {
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-xs);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme='dark'] .rtc-cell {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.rtc-cell.full-width {
+  grid-column: span 2;
+}
+
+.rtc-cell-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: #7d6b53;
+  text-transform: uppercase;
+}
+
+[data-theme='dark'] .rtc-cell-label {
+  color: #9cb1a2;
+}
+
+.rtc-cell-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Spatial Discrepancy Banner */
+.discrepancy-banner {
+  background-color: var(--color-danger-subtle);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.discrepancy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-danger);
+}
+
+.discrepancy-text {
+  font-size: 11px;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+/* Verification Data Ledger Form */
+.verification-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.ulpin-container {
+  background-color: var(--bg-subtle);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ulpin-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+}
+
+[data-theme='dark'] .ulpin-pill {
+  color: var(--color-brass);
+}
+
+.extent-engine-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background-color: var(--bg-subtle);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+
+.extent-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.extent-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.extent-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Sticky Action Footer for Review Workbench */
+.sticky-action-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 45;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.btn-reject {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--color-danger);
+  background-color: var(--color-danger-subtle);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-resurvey {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--color-brass);
+  background-color: var(--color-brass-light);
+  color: var(--color-brass-dark);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+[data-theme='dark'] .btn-resurvey {
+  background-color: #3b2d13;
+  color: #f6d186;
+}
+
+.btn-approve {
+  flex: 2;
+  padding: 10px 14px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-approve:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* ==========================================================================
+   Cadastral GIS Map Styling (Screenshot 3)
+   ========================================================================== */
+.gis-location-bar {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}
+
+.gis-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gis-search-input-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.gis-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  padding-left: 32px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.gis-layer-pills {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.gis-layer-pill {
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  border: 1px solid var(--border-subtle);
+}
+
+.gis-layer-pill.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+}
+
+[data-theme='dark'] .gis-layer-pill.active {
+  background-color: var(--bg-surface-elevated);
+  border-color: var(--color-brass);
+  color: var(--color-brass);
+}
+
+.gis-layer-pill.alert {
+  background-color: var(--color-danger-subtle);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* GIS Full Canvas Container */
+.gis-map-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  background-color: #f1f4ed;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] .gis-map-canvas-container {
+  background-color: #151d18;
+}
+
+.map-control-compass {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-danger);
+  z-index: 10;
+}
+
+.map-control-zoom {
+  position: absolute;
+  right: 10px;
+  top: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.map-zoom-btn {
+  width: 32px;
+  height: 32px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.map-scale-legend {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 4px 8px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  z-index: 10;
+  color: #121714;
+}
+
+[data-theme='dark'] .map-scale-legend {
+  background-color: rgba(27, 35, 31, 0.85);
+  color: #ecf0ed;
+}
+
+/* Parcel Bottom Sheet Drawer */
+.parcel-drawer {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+}
+
+.parcel-drawer-drag-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--border-strong);
+  margin: 0 auto;
+}
+
+.parcel-drawer-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.parcel-drawer-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* Responsive Utilities */
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .action-buttons-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================================
+   Desktop Navigation Sidebar Component (.desktop-sidebar)
+   ========================================================================== */
+.desktop-sidebar {
+  display: none;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.sidebar-brand-emblem {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: var(--color-brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-brand-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.sidebar-brand-sub {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  color: var(--color-brass-dark);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.sidebar-officer-card {
+  margin: 14px 12px;
+  padding: 10px 12px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sidebar-section-label {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 14px 4px 14px;
+}
+
+.sidebar-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 10px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.15s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item.active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-weight: 700;
+  border-left: 3px solid var(--color-brass);
+}
+
+.sidebar-nav-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.sidebar-nav-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.sidebar-nav-label-primary {
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-nav-label-secondary {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-kannada);
+}
+
+.sidebar-quick-action-btn {
+  width: 100%;
+  padding: 9px 12px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.15s ease;
+}
+
+.sidebar-quick-action-btn:hover {
+  opacity: 0.92;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.sidebar-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  padding: 5px 8px;
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-xs);
+  margin-bottom: 8px;
+}
+
+.sidebar-role-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 5px 8px;
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-subtle);
+}
+
+.sidebar-role-menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  width: 180px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-role-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  font-size: 11px;
+  border-radius: var(--radius-xs);
+  text-align: left;
+}
+
+.sidebar-role-option:hover {
+  background-color: var(--bg-subtle);
+}
+
+.sidebar-role-option.active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Desktop Top Bar Component (.desktop-topbar)
+   ========================================================================== */
+.desktop-topbar {
+  display: none;
+}
+
+.desktop-page-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.desktop-page-title-kn {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.desktop-search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 360px;
+}
+
+.desktop-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.desktop-search-input {
+  width: 100%;
+  padding: 7px 32px 7px 32px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 11.5px;
+  color: var(--text-primary);
+  transition: border-color 0.15s ease;
+}
+
+.desktop-search-input:focus {
+  outline: none;
+  border-color: var(--color-brass);
+}
+
+.desktop-search-shortcut {
+  position: absolute;
+  right: 10px;
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background-color: var(--bg-surface);
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
+.desktop-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: var(--color-primary-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.desktop-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+}
+
+.desktop-icon-btn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.desktop-icon-btn:hover {
+  background-color: var(--bg-subtle);
+}
+
+.desktop-icon-counter {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--color-danger);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+}
+
+.desktop-profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px 3px 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  cursor: pointer;
+}
+
+.desktop-chip-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-brass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.desktop-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 220px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 10px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Desktop Data Tables (.desktop-data-table)
+   ========================================================================== */
+.desktop-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.desktop-data-table th {
+  padding: 12px 16px;
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.desktop-data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-card);
+  font-size: 12.5px;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.desktop-data-table tbody tr:hover {
+  background-color: var(--bg-surface-elevated);
+}
+
+.desktop-data-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   Desktop Layout Transformation (@media min-width: 1024px)
+   Laptops (1440x900) & Desktops
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .app-wrapper {
+    flex-direction: row;
+    overflow-x: hidden;
+  }
+
+  .desktop-sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    z-index: 50;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .app-main-area {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    max-width: none;
+    min-height: 100vh;
+    box-shadow: none;
+    background-color: var(--bg-app);
+  }
+
+  .mobile-only-header {
+    display: none;
+  }
+
+  .mobile-only-bottomnav {
+    display: none;
+  }
+
+  .desktop-only-topbar {
+    display: block;
+  }
+
+  .desktop-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(8px);
+  }
+
+  .main-content {
+    padding: 24px 36px;
+    padding-bottom: 48px;
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 24px;
+  }
+
+  .main-content.desktop-expanded {
+    max-width: 1600px;
+  }
+
+  .desktop-system-health-card {
+    display: block;
+  }
+
+  /* Dashboard: 4-column single row for metrics */
+  .metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  /* Dashboard: 4-column row for administrative actions */
+  .action-buttons-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  /* Dashboard: 2-column split (Primary 1fr, Secondary 380px) */
+  .dashboard-content-split {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .dashboard-primary-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .dashboard-secondary-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Review Workbench: Wide 2-Column Split Screen */
+  .workbench-split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .workbench-pane-left {
+    position: sticky;
+    top: 76px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+
+  .workbench-pane-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Cadastral GIS Map: Maximized Map + Dockable Inspector Panel */
+  .gis-desktop-workspace {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    align-items: stretch;
+    height: calc(100vh - 180px);
+    min-height: 640px;
+  }
+
+  .gis-map-canvas-container {
+    height: 100%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .gis-inspector-pane {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .gis-floating-overlap-banner {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background-color: #fee2e2;
+    border: 1px solid #f87171;
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-md);
+    z-index: 15;
+  }
+
+  /* Multi-Column Data Tables */
+  .desktop-table-container {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mobile-card-list {
+    display: none;
+  }
+}
+
+/* Dark Theme Overrides for Desktop Elements */
+[data-theme='dark'] .sidebar-officer-card {
+  background-color: var(--bg-surface-elevated);
+}
+
+[data-theme='dark'] .sidebar-status-pill {
+  background-color: var(--bg-subtle);
+}
+
+[data-theme='dark'] .desktop-status-badge {
+  background-color: rgba(45, 90, 65, 0.25);
+  color: #4ade80;
+}
+
+[data-theme='dark'] .desktop-data-table th {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .desktop-data-table tbody tr:hover {
+  background-color: var(--bg-card-highlight);
+}
+
+[data-theme='dark'] .gis-floating-overlap-banner {
+  background-color: #3b1b1b;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* ==========================================================================
+   Government Portal Minimalist Design System (.gov-*)
+   Inspired by Karnataka Bhoomi & Maharashtra Mahabhumi
+   ========================================================================== */
+
+.gov-page-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gov-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gov-page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 4px 0;
+}
+
+.gov-page-subtitle {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.gov-badge-info {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+/* Clean Stats Bar (4-col / 3-col) */
+.gov-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.gov-stat-item {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gov-stat-number {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.gov-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.gov-stat-sub {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Government Section Panel */
+.gov-section {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.gov-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 8px;
+}
+
+.gov-section-header h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Full Width Government Data Table */
+.gov-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.gov-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+.gov-table th {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.gov-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.gov-table tbody tr:hover {
+  background-color: var(--bg-card-highlight);
+}
+
+.gov-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.gov-table-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 9px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.gov-table-action-btn:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+/* Government Services Directory Grid */
+.gov-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gov-service-tile {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.gov-service-tile:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.gov-service-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gov-service-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.gov-service-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Government Status Pills */
+.gov-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.status-pill-verified {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.status-pill-in-review {
+  background-color: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.status-pill-pending {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.status-pill-urgent {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Technical Details Accordion */
+.gov-details-accordion {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.gov-details-summary {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gov-details-content {
+  padding: 10px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 11px;
+}
+
+/* Government Document Upload Dropzone */
+.gov-upload-dropzone {
+  border: 2px dashed var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 32px 20px;
+  text-align: center;
+  background-color: var(--bg-surface);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gov-upload-dropzone:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+/* Dark Theme Overrides for Gov Portal System */
+[data-theme='dark'] .gov-table th {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .gov-section-header {
+  background-color: var(--bg-subtle);
+}
+
+[data-theme='dark'] .status-pill-verified {
+  background-color: #143823;
+  color: #4ade80;
+  border-color: #225e3b;
+}
+
+[data-theme='dark'] .status-pill-in-review {
+  background-color: #3b2811;
+  color: #fbbf24;
+  border-color: #5c3f1a;
+}
+
+[data-theme='dark'] .status-pill-pending {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+[data-theme='dark'] .status-pill-urgent {
+  background-color: #3f1919;
+  color: #f87171;
+  border-color: #632626;
+}
+
+/* ==========================================================================
+   Assigned Cases / Review Queue Filters & Search
+   ========================================================================== */
+.gov-filter-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.gov-filter-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gov-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.gov-filter-pill:hover {
+  background-color: var(--bg-card-highlight);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.gov-filter-pill.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+[data-theme='dark'] .gov-filter-pill.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-brass);
+  color: #ecf0ed;
+}
+
+.gov-filter-pill-count {
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  opacity: 0.85;
+}
+
+.gov-filter-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-xs);
+  border: 1px dashed var(--border-strong);
+  background-color: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gov-filter-reset-btn:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-subtle);
+}
+
+/* ==========================================================================
+   GIS Map Workspace, Controls & Toolbar
+   ========================================================================== */
+.gov-gis-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100vh - var(--nav-height));
+}
+
+.gov-gis-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.gov-gis-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gov-gis-search-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.gov-gis-search-input {
+  width: 100%;
+  height: 34px;
+  padding: 6px 30px 6px 32px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  color: var(--text-primary);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gov-gis-search-input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-subtle);
+}
+
+.gov-gis-search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.gov-gis-search-clear:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-subtle);
+}
+
+.gov-gis-layers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gov-gis-layer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gov-gis-layer-btn:hover {
+  background-color: var(--bg-card-highlight);
+  color: var(--text-primary);
+}
+
+.gov-gis-layer-btn.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+}
+
+[data-theme='dark'] .gov-gis-layer-btn.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-brass);
+  color: #ecf0ed;
+}
+
+.gov-gis-layer-btn.has-alert {
+  border-color: rgba(200, 75, 49, 0.4);
+}
+
+.gov-gis-main-split {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  flex: 1;
+  min-height: 580px;
+}
+
+@media (max-width: 900px) {
+  .gov-gis-main-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gov-gis-map-canvas-area {
+  position: relative;
+  background-color: #e5ebde;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 540px;
+}
+
+[data-theme='dark'] .gov-gis-map-canvas-area {
+  background-color: #17211b;
+}
+
+.gov-gis-sidebar-panel {
+  border-left: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .gov-gis-sidebar-panel {
+    border-left: none;
+    border-top: 1px solid var(--border-subtle);
+  }
+}
+
+/* Map Floating Controls */
+.map-control-compass {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+}
+
+.map-scale-legend {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 3px 8px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .map-scale-legend {
+  background-color: rgba(27, 35, 31, 0.88);
+  color: var(--text-secondary);
+}
+
+.map-control-zoom {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  box-shadow: var(--shadow-md);
+}
+
+.map-zoom-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-zoom-btn:hover:not(:disabled) {
+  background-color: var(--color-primary-subtle);
+  border-color: var(--border-strong);
+}
+
+.map-zoom-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* GIS Floating Overlap Notice */
+.gov-gis-floating-notice {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .gov-gis-floating-notice {
+  background-color: #3b1414;
+  border-color: #7f1d1d;
+}
+
+.gov-gis-notice-btn {
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+
+.gov-gis-notice-btn:hover {
+  background-color: #b91c1c;
+}
+
+/* ==========================================================================
+   Review Workbench Masthead & Role Scope Notice
+   ========================================================================== */
+.gov-workbench-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gov-table-mono-highlight {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--bg-subtle);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
+[data-theme='dark'] .gov-table-mono-highlight {
+  color: var(--color-brass);
+}
+
+.gov-role-scope-notice {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--color-primary);
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-xs);
+  line-height: 1.4;
+}
+
+[data-theme='dark'] .gov-role-scope-notice {
+  border-left-color: var(--color-brass);
+}
+
+
+

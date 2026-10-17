@@ -4,6 +4,7 @@ import {
   requestUploadSlot,
   finalizeUpload,
   getDocument,
+  getDocumentFile,
   getDocumentsList,
   analyzeDirect,
 } from './document.controller.js';
@@ -26,5 +27,6 @@ router.post('/upload', uploadSingleDocument, uploadDocument);
 
 router.get('/', getDocumentsList);
 router.get('/:id', getDocument);
+router.get('/:id/file', getDocumentFile);
 
 export default router;

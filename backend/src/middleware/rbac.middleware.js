@@ -1,6 +1,6 @@
 /**
  * Role-Based Access Control (RBAC) Middleware
- * Roles: ADMIN, TEHSILDAR, PATWARI, CITIZEN
+ * Authorized Roles: TEHSILDAR, PATWARI, CITIZEN
  */
 
 export const requireRoles = (...allowedRoles) => {

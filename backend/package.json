@@ -9,7 +9,8 @@
     "dev": "node --watch src/server.js",
     "worker": "node src/workers/document.worker.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --forceExit",
-    "migrate": "node src/db/migrate.js"
+    "migrate": "node src/db/migrate.js",
+    "provision:staff": "node src/scripts/provision-staff.js"
   },
   "keywords": [
     "land-records",
@@ -40,6 +41,7 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.13.1",
     "sharp": "^0.33.5",
+    "tesseract.js": "^7.0.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {

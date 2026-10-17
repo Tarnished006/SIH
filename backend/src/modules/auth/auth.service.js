@@ -38,11 +38,18 @@ export const registerUser = async ({
   email,
   password,
   name,
-  role = 'PATWARI',
   department,
   stateLgd,
   districtLgd,
 }) => {
+  if (!email || !password || !name) {
+    throw new Error('Name, email, and password are required');
+  }
+
+  if (password.length < 6) {
+    throw new Error('Password must be at least 6 characters long');
+  }
+
   const cleanEmail = email.toLowerCase().trim();
   const existing = await prisma.user.findUnique({
     where: { email: cleanEmail },
@@ -53,15 +60,16 @@ export const registerUser = async ({
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
+  // Public registration ALWAYS creates a CITIZEN account regardless of any input
   const user = await prisma.user.create({
     data: {
       email: cleanEmail,
       passwordHash,
-      name,
-      role,
-      department: department || 'Revenue Dept',
-      stateLgdCode: stateLgd || '09',
-      districtLgdCode: districtLgd || '140',
+      name: name.trim(),
+      role: 'CITIZEN',
+      department: department || 'Citizen Services',
+      stateLgdCode: stateLgd || '29', // Default Karnataka (29)
+      districtLgdCode: districtLgd || '572',
     },
     select: {
       id: true,

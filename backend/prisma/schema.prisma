@@ -7,50 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  TEHSILDAR
-  PATWARI
-  CITIZEN
-}
-
-enum DocumentStatus {
-  UPLOADED
-  PREPROCESSING
-  INFERENCE
-  VALIDATING
-  READY_FOR_REVIEW
-  VERIFIED
-  REJECTED
-  FAILED
-}
-
-enum ReviewStatus {
-  PENDING_REVIEW
-  IN_REVIEW
-  VERIFIED
-  REJECTED
-}
-
-enum ValidationStatus {
-  PASS
-  WARNING
-  FAIL
-}
-
-enum FieldStatus {
-  UNVERIFIED
-  ACCEPTED
-  CORRECTED
-  REJECTED
-}
-
 model User {
   id              String       @id @default(uuid()) @db.Uuid
   email           String       @unique @db.VarChar(255)
   passwordHash    String       @map("password_hash") @db.VarChar(255)
   name            String       @db.VarChar(255)
-  role            Role
+  role            String       @db.VarChar(50)
   department      String?      @db.VarChar(100)
   stateLgdCode    String?      @map("state_lgd_code") @db.VarChar(20)
   districtLgdCode String?      @map("district_lgd_code") @db.VarChar(20)
@@ -73,9 +35,10 @@ model Document {
   sha256Hash        String         @unique @map("sha256_hash") @db.VarChar(64)
   s3Key             String         @map("s3_key") @db.VarChar(500)
   preprocessedS3Key String?        @map("preprocessed_s3_key") @db.VarChar(500)
-  status            DocumentStatus @default(UPLOADED)
+  status            String         @default("UPLOADED") @db.VarChar(50)
   errorMessage      String?        @map("error_message") @db.Text
   uploadedById      String?        @map("uploaded_by") @db.Uuid
+  applicationNo     String?        @map("application_no") @db.VarChar(100)
   metadata          Json           @default("{}") @db.JsonB
   createdAt         DateTime       @default(now()) @map("created_at") @db.Timestamptz
   updatedAt         DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
@@ -106,7 +69,11 @@ model LandRecord {
   owners                 Json         @default("[]") @db.JsonB
   overallConfidence      Decimal?     @default(0.0) @map("overall_confidence") @db.Decimal(5, 4)
   reviewPriorityScore    Decimal?     @default(1.0) @map("review_priority_score") @db.Decimal(5, 4)
-  reviewStatus           ReviewStatus @default(PENDING_REVIEW) @map("review_status")
+  reviewStatus           String       @default("PENDING_REVIEW") @map("review_status") @db.VarChar(50)
+  operatorRemarks        String?      @map("operator_remarks") @db.Text
+  decisionRemarks        String?      @map("decision_remarks") @db.Text
+  rejectionReason        String?      @map("rejection_reason") @db.Text
+  correctionsRequested   String?      @map("corrections_requested") @db.Text
   lockedById             String?      @map("locked_by") @db.Uuid
   lockedAt               DateTime?    @map("locked_at") @db.Timestamptz
   verifiedById           String?      @map("verified_by") @db.Uuid
@@ -147,10 +114,10 @@ model FieldExtraction {
   aiExtractedValue      String?          @map("ai_extracted_value") @db.Text
   aiConfidence          Decimal?         @map("ai_confidence") @db.Decimal(5, 4)
   boundingBox           Json?            @map("bounding_box") @db.JsonB
-  ruleValidationStatus  ValidationStatus @default(PASS) @map("rule_validation_status")
+  ruleValidationStatus  String           @default("PASS") @map("rule_validation_status") @db.VarChar(50)
   ruleValidationMessage String?          @map("rule_validation_message") @db.Text
   humanVerifiedValue    String?          @map("human_verified_value") @db.Text
-  status                FieldStatus      @default(UNVERIFIED)
+  status                String           @default("UNVERIFIED") @db.VarChar(50)
   correctionReason      String?          @map("correction_reason") @db.Text
   createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz
 

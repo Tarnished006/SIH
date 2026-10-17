@@ -1,0 +1,427 @@
+/**
+ * BhumiSetu High-Fidelity Dataset
+ * Modeled directly from Google Stitch Land Governance Design References
+ * Aligned with Karnataka Bhoomi, DILRMP & Bhu-Aadhaar (ULPIN) Standards
+ */
+
+export const DEFAULT_OFFICER = {
+  id: 'b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e',
+  name: 'Rajesh K. Sharma',
+  title: 'Tehsildar Rajesh K. Sharma',
+  titleKn: 'ತಹಶೀಲ್ದಾರ್ ರಾಜೇಶ್ ಕೆ. ಶರ್ಮಾ',
+  role: 'TEHSILDAR',
+  department: 'Land Revenue & Cadastral Division',
+  departmentKn: 'ಭೂಕಂದಾಯ ಮತ್ತು ಮೋಜಣಿ ಶಾಖೆ',
+  jurisdiction: 'Ramanagara • Magadi • Kasaba',
+  jurisdictionKn: 'ರಾಮನಗರ • ಮಾಗಡಿ • ಕಸಬಾ ಹೋಬಳಿ',
+  zoneTag: 'SEC-8A',
+  stateLgd: '29', // Karnataka
+  districtLgd: '557', // Ramanagara / Bengaluru Rural
+  subdistrictLgd: '05537', // Magadi
+  villageLgd: '603214', // Thippagondanahalli
+  villageName: 'Thippagondanahalli',
+  villageNameKn: 'ತಿಪ್ಪಗೊಂಡನಹಳ್ಳಿ',
+  email: 'tehsildar@lucknow.gov.in',
+};
+
+export const DEMO_USERS = [
+  {
+    role: 'TEHSILDAR',
+    label: 'Tehsildar (Rajesh Sharma)',
+    email: 'tehsildar@lucknow.gov.in',
+    password: 'Password@123',
+    department: 'Revenue Dept, Ramanagara',
+  },
+  {
+    role: 'PATWARI',
+    label: 'Patwari (Amit Verma)',
+    email: 'patwari@lucknow.gov.in',
+    password: 'Password@123',
+    department: 'Tehsil Sadar',
+  },
+  {
+    role: 'ADMIN',
+    label: 'National Admin',
+    email: 'admin@bhumisetu.gov.in',
+    password: 'Password@123',
+    department: 'Dept of Land Resources',
+  },
+  {
+    role: 'CITIZEN',
+    label: 'Citizen (Ramesh Kumar)',
+    email: 'citizen@india.in',
+    password: 'Password@123',
+    department: 'Public Citizen',
+  },
+];
+
+export const DASHBOARD_METRICS = {
+  pendingMutations: {
+    count: 38,
+    unit: 'files',
+    badge: '12 URGENT',
+    type: 'urgent',
+  },
+  digitizedParcels: {
+    count: '14,892',
+    unit: 'parcels',
+    badge: '99.5% Sync',
+    type: 'sync',
+  },
+  gisConflicts: {
+    count: '07',
+    unit: 'plots',
+    badge: 'FLAGGED',
+    type: 'flagged',
+  },
+  dailyLedgerHash: {
+    count: '#48.1K',
+    unit: 'blocks',
+    badge: 'Immutable',
+    type: 'immutable',
+  },
+};
+
+export const PENDING_MUTATION_QUEUE = [
+  {
+    id: 'rec-142-3a-thippa',
+    surveyNumber: '142/3A',
+    subdivisionNumber: '3A',
+    villageName: 'Thippagondanahalli',
+    villageNameKn: 'ತಿಪ್ಪಗೊಂಡನಹಳ್ಳಿ',
+    villageLgd: '603214',
+    ulpin: 'KA-29-08-014-00142-003A',
+    tag: 'PARTITION DISPUTED',
+    tagColor: 'danger',
+    ocrConfidence: '99.2% OCR',
+    reviewPriorityScore: 0.92,
+    mutationNo: 'REV-KA-2025-0982',
+    partyDetails: 'Ramakrishnaiah S/o Venkatappa',
+    partyDetailsKn: 'ರಾಮಕೃಷ್ಣಯ್ಯ ಬಿನ್ ವೆಂಕಟಪ್ಪ',
+    discrepancyNote: 'East boundary perimeter exceeds surveyed GIS record by 1.2m',
+    areaText: '2-14 (2 Ac 14 Gt)',
+    reviewStatus: 'PENDING_REVIEW',
+    actionType: 'review',
+  },
+  {
+    id: 'rec-184-3-tavarekere',
+    surveyNumber: '184/3',
+    subdivisionNumber: '3',
+    villageName: 'Tavarekere',
+    villageNameKn: 'ತಾವರೆಕೆರೆ',
+    villageLgd: '603215',
+    ulpin: '29-14-MG-680-1843-01',
+    tag: 'INHERITANCE',
+    tagColor: 'warning',
+    ocrConfidence: '99.2% OCR',
+    reviewPriorityScore: 0.85,
+    mutationNo: 'REV-KA-2025-0841',
+    partyDetails: 'Party: Chennappa Gowda → Manjunath C.',
+    partyDetailsKn: 'ಚೆನ್ನಪ್ಪ ಗೌಡ → ಮಂಜುನಾಥ ಸಿ.',
+    areaText: '1-28 (1 Ac 28 Gt)',
+    reviewStatus: 'PENDING_REVIEW',
+    actionType: 'review',
+  },
+  {
+    id: 'rec-42-1b-kudur',
+    surveyNumber: '42/1B',
+    subdivisionNumber: '1B',
+    villageName: 'Kudur',
+    villageNameKn: 'ಕೂಡೂರು',
+    villageLgd: '603216',
+    ulpin: '29-14-MG-612-6042-1B',
+    tag: 'PARTITION DISPUTED',
+    tagColor: 'danger',
+    ocrConfidence: '94.1% OCR',
+    reviewPriorityScore: 0.88,
+    mutationNo: 'REV-KA-2025-0720',
+    partyDetails: 'Encroachment mismatch: 2.3 Guntas with Sy 42/2',
+    partyDetailsKn: 'ಸರ್ವೇ 42/2 ಜೊತೆ 2.3 ಗುಂಟೆ ಅತಿಕ್ರಮಣ ವ್ಯತ್ಯಾಸ',
+    areaText: '3-05 (3 Ac 05 Gt)',
+    reviewStatus: 'IN_REVIEW',
+    actionType: 'inspect',
+  },
+  {
+    id: 'rec-91-08-solur',
+    surveyNumber: '91/08',
+    subdivisionNumber: '8',
+    villageName: 'Solur',
+    villageNameKn: 'ಸೋಲೂರು',
+    villageLgd: '603217',
+    ulpin: '29-14-MG-645-0091-08',
+    tag: 'SALE DEED',
+    tagColor: 'info',
+    ocrConfidence: '98.7% OCR',
+    reviewPriorityScore: 0.74,
+    mutationNo: 'REV-KA-2025-0612',
+    partyDetails: 'Registrar EC Clear • Ready for Seal',
+    partyDetailsKn: 'ನೋಂದಣಿ ಇಸಿ ದೃಢೀಕೃತ • ಮುದ್ರೆಗೆ ಸಿದ್ಧವಾಗಿದೆ',
+    areaText: '0-38 (0 Ac 38 Gt)',
+    reviewStatus: 'PENDING_REVIEW',
+    actionType: 'endorse',
+  },
+];
+
+export const WORKBENCH_PRIMARY_RECORD = {
+  id: 'rec-142-3a-thippa',
+  mutationNo: 'REV-KA-2025-0982',
+  officerLock: 'R. K. Sharma (Tehsildar)',
+  stage: 'STAGE 3/4',
+  surveyNumber: '142/3A',
+  hissaNumber: '3A',
+  villageName: 'Thippagondanahalli',
+  villageNameKn: 'ತಿಪ್ಪಗೊಂಡನಹಳ್ಳಿ',
+  villageLgd: '603214',
+  taluk: 'Nelamangala / Magadi',
+  district: 'Ramanagara',
+  ulpin: 'KA-29-08-014-00142-003A',
+  centroid: {
+    lat: 12.9814,
+    lon: 77.3411,
+  },
+  bhuvanSync: 'Bhuvan Cadastral Sync OK',
+  
+  // RTC Form 16 Attributes
+  rtcExtract: {
+    khataNo: 'KH-88832',
+    hissaNo: '142/3A',
+    occupantName: 'Ramakrishnaiah S/o Venkatappa',
+    occupantNameKn: 'ರಾಮಕೃಷ್ಣಯ್ಯ ಬಿನ್ ವೆಂಕಟಪ್ಪ',
+    aadhaarStatus: 'UIDAI: ********9281 (Verified)',
+    rawExtent: '2-14 (ಎಕರೆ-ಗುಂಟೆ)',
+    classification: 'Dry Land (ಖುಷ್ಕಿ)',
+    potKharab: '0-02 Guntas',
+    archiveDocId: 'KAVERI-ARCHIVE-DOC#98921',
+    ocrClarity: '100% OCR Clarity',
+  },
+
+  // Spatial discrepancy
+  discrepancy: {
+    title: 'Spatial Discrepancy Flagged',
+    badge: 'Δ 1.2M',
+    description: 'East boundary perimeter (ಪೂರ್ವ ಗಡಿ) exceeds surveyed GIS polyline record by 1.2 meters. Field survey verifications required before title mutation.',
+  },
+
+  // Extent and Unit Engine Calculations
+  extentEngine: {
+    customary: '2 Ac 14 Gt',
+    hectares: 0.9511,
+    squareFeet: 102366,
+    squareMeters: 9510.1,
+    assessmentTax: '₹ 42.50 / year',
+  },
+
+  // Verification Checklist Items
+  fieldExtractions: [
+    {
+      id: 'f-1',
+      fieldName: 'owner_name',
+      label: 'OWNER LEGAL NAME / ಖಾತೆದಾರ',
+      aiExtractedValue: 'ರಾಮಕೃಷ್ಣಯ್ಯ ಬಿನ್ ವೆಂಕಟಪ್ಪ',
+      verifiedValue: 'Ramakrishnaiah S/o Venkatappa',
+      confidence: 0.992,
+      status: 'MATCH',
+    },
+    {
+      id: 'f-2',
+      fieldName: 'survey_hissa',
+      label: 'SURVEY & HISSA / ಸರ್ವೇ ಮತ್ತು ಹಿಸ್ಸಾ',
+      aiExtractedValue: '142/3A',
+      verifiedValue: '142/3A',
+      confidence: 0.985,
+      status: 'MATCH',
+    },
+    {
+      id: 'f-3',
+      fieldName: 'land_classification',
+      label: 'LAND CLASS / ಭೂ-ವರ್ಗ',
+      aiExtractedValue: 'Dry (ಖುಷ್ಕಿ)',
+      verifiedValue: 'Dry (ಖುಷ್ಕಿ)',
+      confidence: 0.960,
+      status: 'MATCH',
+    },
+    {
+      id: 'f-4',
+      fieldName: 'area_extent',
+      label: 'TOTAL EXTENT / ವಿಸ್ತೀರ್ಣ',
+      aiExtractedValue: '2 Ac 14 Gt (9,510.1 m²)',
+      verifiedValue: '2 Ac 14 Gt (9,510.1 m²)',
+      confidence: 0.954,
+      status: 'MATCH',
+    },
+  ],
+
+  defaultAdjudicationRemarks: 'Recorded survey boundary discrepancy on East axis (-1.2m). Citizen applicant notified under Rule 38-A Karnataka Land Revenue Act.',
+};
+
+export const CADASTRAL_PARCELS_MAP = [
+  {
+    surveyNumber: '141',
+    extent: '1A 32G',
+    classification: 'Agricultural',
+    isDisputed: false,
+    isSelected: false,
+    areaSqm: 7284,
+    points: [
+      { x: 30, y: 150 },
+      { x: 150, y: 145 },
+      { x: 130, y: 280 },
+      { x: 20, y: 260 },
+    ],
+  },
+  {
+    surveyNumber: '142/1',
+    extent: '0A 38G',
+    classification: 'Agricultural',
+    isDisputed: false,
+    isSelected: false,
+    areaSqm: 3844,
+    points: [
+      { x: 150, y: 145 },
+      { x: 310, y: 135 },
+      { x: 295, y: 195 },
+      { x: 140, y: 205 },
+    ],
+  },
+  {
+    surveyNumber: '142/2',
+    extent: '1A 05G',
+    classification: 'Agricultural',
+    isDisputed: false,
+    isSelected: false,
+    areaSqm: 4552,
+    points: [
+      { x: 310, y: 135 },
+      { x: 440, y: 130 },
+      { x: 410, y: 190 },
+      { x: 295, y: 195 },
+    ],
+  },
+  {
+    surveyNumber: '142/3',
+    hissa: '3A',
+    extent: '2A 14G',
+    classification: 'Dry (ಖುಷ್ಕಿ)',
+    isDisputed: true,
+    isSelected: true,
+    areaSqm: 9510.19,
+    khataNo: '412',
+    ownerName: 'ರಾಮಕೃಷ್ಣಯ್ಯ ಬಿನ್ ವೆಂಕಟಪ್ಪ (Ramakrishnaiah s/o Venkatappa)',
+    ownerShare: '1/1',
+    ulpin: 'KA-29-08-014-00142-003A',
+    tax: '₹ 42.50',
+    overlapAreaSqm: 7.4,
+    overlapWith: '142/4',
+    points: [
+      { x: 140, y: 205 },
+      { x: 295, y: 195 },
+      { x: 280, y: 310 },
+      { x: 125, y: 300 },
+    ],
+  },
+  {
+    surveyNumber: '142/4',
+    extent: 'Disputed',
+    classification: 'ವಿವಾದಿತ (Disputed)',
+    isDisputed: true,
+    isSelected: false,
+    areaSqm: 8200,
+    points: [
+      { x: 265, y: 200 },
+      { x: 420, y: 195 },
+      { x: 395, y: 340 },
+      { x: 250, y: 330 },
+    ],
+  },
+  {
+    surveyNumber: '143',
+    extent: 'Gomal (Forest)',
+    classification: 'ಗೋಮಾಳ (Forest)',
+    isDisputed: false,
+    isSelected: false,
+    areaSqm: 18500,
+    points: [
+      { x: 125, y: 300 },
+      { x: 280, y: 310 },
+      { x: 250, y: 440 },
+      { x: 100, y: 430 },
+    ],
+  },
+];
+
+export const FIELD_SURVEYORS = [
+  {
+    id: 'surv-1',
+    initials: 'VS',
+    name: 'V. Somanna',
+    zone: 'Sy 142/2A • Magadi Rural',
+    status: 'Active',
+  },
+  {
+    id: 'surv-2',
+    initials: 'KM',
+    name: 'Kavita M.',
+    zone: 'Sy 98/4 • Solur',
+    status: 'Active',
+  },
+];
+
+export const AUDIT_LEDGER_BLOCKS = [
+  {
+    sequenceNumber: 1,
+    action: 'GENESIS_BLOCK',
+    actorRole: 'SYSTEM_GENESIS',
+    actorName: 'BhumiSetu Core Ledger',
+    timestamp: '2026-10-15T00:00:00.000Z',
+    prevHash: '0000000000000000000000000000000000000000000000000000000000000000',
+    currHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    delta: { message: 'BhumiSetu Tamper-Evident Audit Ledger Initialized' },
+  },
+  {
+    sequenceNumber: 2,
+    action: 'RECORD_DIGITIZED_BY_AI',
+    actorRole: 'SYSTEM_AI',
+    actorName: 'Vision-Language OCR (TrOCR/Gemini)',
+    timestamp: '2026-10-16T08:14:22.000Z',
+    prevHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+    currHash: '4e1a6b0c95353c7c251d18227e7d6928e3b328a6fcf79ffb4a68297eef98c92a',
+    delta: {
+      surveyNumber: '142/3A',
+      ulpin: 'KA-29-08-014-00142-003A',
+      normalizedAreaHectares: 0.9511,
+      reviewPriorityScore: 0.92,
+      detectedLanguage: 'Kannada',
+      documentType: 'RTC Form 16 (Pahani)',
+    },
+  },
+  {
+    sequenceNumber: 3,
+    action: 'GIS_DISCREPANCY_FLAGGED',
+    actorRole: 'GIS_SPATIAL_ENGINE',
+    actorName: 'PostGIS Topology Engine',
+    timestamp: '2026-10-16T08:14:25.000Z',
+    prevHash: '4e1a6b0c95353c7c251d18227e7d6928e3b328a6fcf79ffb4a68297eef98c92a',
+    currHash: '7c89b21f92418a0234125b098124ef124192bcaef91024823410984120349812',
+    delta: {
+      surveyNumber: '142/3A',
+      overlapParcel: '142/4',
+      discrepancyDeltaMeters: 1.2,
+      overlapAreaSqm: 7.4,
+      ruleCode: 'KAR_LAND_REV_ACT_SEC_38A',
+    },
+  },
+  {
+    sequenceNumber: 4,
+    action: 'RECORD_LOCKED_FOR_REVIEW',
+    actorRole: 'TEHSILDAR',
+    actorName: 'Rajesh K. Sharma',
+    timestamp: '2026-10-16T09:30:10.000Z',
+    prevHash: '7c89b21f92418a0234125b098124ef124192bcaef91024823410984120349812',
+    currHash: '8f3c7b2a9e14d632cb34fc16a56218d6bc9f91e23a48c718293cbaf88718ed70',
+    delta: {
+      leaseMinutes: 15,
+      officerEmail: 'tehsildar@lucknow.gov.in',
+      reviewStatus: 'IN_REVIEW',
+    },
+  },
+];

@@ -190,11 +190,11 @@ export const isSessionActive = async (userId, sessionId) => {
   try {
     if (await isRedisAvailable(redis)) {
       const exists = await redis.exists(`session:${userId}:${sessionId}`);
-      return exists === 1;
+      if (exists === 1) return true;
     }
     return inMemorySessions.has(`session:${userId}:${sessionId}`);
   } catch {
-    return true; // fail-open for network blips if JWT is mathematically valid
+    return inMemorySessions.has(`session:${userId}:${sessionId}`);
   }
 };
 

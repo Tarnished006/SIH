@@ -12,7 +12,12 @@ export async function runMigrations() {
     console.log('[MIGRATION] Running initial schema migration...');
     const schemaSql = fs.readFileSync(path.join(__dirname, 'migrations', '001_initial_schema.sql'), 'utf8');
     await client.query(schemaSql);
-    console.log('[MIGRATION] Schema migration complete.');
+    console.log('[MIGRATION] Schema migration 001 complete.');
+
+    console.log('[MIGRATION] Running workflow and remarks migration 002...');
+    const schemaSql2 = fs.readFileSync(path.join(__dirname, 'migrations', '002_workflow_and_remarks.sql'), 'utf8');
+    await client.query(schemaSql2);
+    console.log('[MIGRATION] Schema migration 002 complete.');
 
     console.log('[MIGRATION] Running initial seeds...');
     const seedSql = fs.readFileSync(path.join(__dirname, 'seeds', '001_units_and_lgd.sql'), 'utf8');

@@ -1,16 +1,46 @@
-import { getRecordDetails, searchRecords } from './record.service.js';
+import { getRecordDetails, searchRecords, getUserApplications } from './record.service.js';
 
 export const getRecord = async (req, res, next) => {
   try {
     const record = await getRecordDetails(req.params.id);
+
+    // Record-level ownership check:
+    // If role is CITIZEN, the document MUST have been uploaded by this user!
+    if (req.user?.role === 'CITIZEN' && record.document?.uploadedById !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden',
+        message: 'Access denied. You do not have permission to view other citizens\' applications or documents.',
+      });
+    }
+
     res.json({ success: true, record });
   } catch (error) {
     res.status(404).json({ success: false, error: error.message });
   }
 };
 
+export const getMyApplications = async (req, res, next) => {
+  try {
+    const applications = await getUserApplications(req.user.id);
+    res.json({
+      success: true,
+      count: applications.length,
+      applications,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const findRecords = async (req, res, next) => {
   try {
+    // If role is CITIZEN, only return their own records
+    if (req.user?.role === 'CITIZEN') {
+      const applications = await getUserApplications(req.user.id);
+      return res.json({ success: true, count: applications.length, records: applications });
+    }
+
     const { query, villageLgd, status, limit, offset } = req.query;
     const records = await searchRecords({
       query,
@@ -25,4 +55,4 @@ export const findRecords = async (req, res, next) => {
   }
 };
 
-export default { getRecord, findRecords };
+export default { getRecord, getMyApplications, findRecords };

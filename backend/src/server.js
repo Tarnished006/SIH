@@ -1,6 +1,7 @@
 import app from './app.js';
 import { config } from './config/env.js';
 import pool from './config/db.js';
+import './workers/document.worker.js';
 
 const server = app.listen(config.port, () => {
   console.log('================================================================');

@@ -84,19 +84,51 @@ export const finalizeUpload = async (req, res, next) => {
 export const getDocument = async (req, res, next) => {
   try {
     const doc = await getDocumentById(req.params.id);
+    if (req.user?.role === 'CITIZEN' && doc.uploadedById && doc.uploadedById !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden',
+        message: 'Access denied: You cannot view documents uploaded by other citizens.',
+      });
+    }
     res.json({ success: true, document: doc });
   } catch (error) {
     res.status(404).json({ success: false, error: error.message });
   }
 };
 
+export const getDocumentFile = async (req, res, next) => {
+  try {
+    const doc = await getDocumentById(req.params.id);
+    if (req.user?.role === 'CITIZEN' && doc.uploadedById && doc.uploadedById !== req.user.id) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden',
+        message: 'Access denied: You cannot download documents uploaded by other citizens.',
+      });
+    }
+
+    const { getObjectBuffer } = await import('../../config/s3.js');
+    const buffer = await getObjectBuffer(doc.s3Key);
+    res.setHeader('Content-Type', doc.mimeType || 'image/jpeg');
+    res.setHeader('Content-Disposition', `inline; filename="${doc.originalFilename}"`);
+    return res.send(buffer);
+  } catch (error) {
+    res.status(404).json({ success: false, error: 'File content not found' });
+  }
+};
+
 export const getDocumentsList = async (req, res, next) => {
   try {
     const { limit, offset, status } = req.query;
+    // Citizens can ONLY view their own uploaded documents
+    const uploadedByFilter = req.user?.role === 'CITIZEN' ? req.user.id : null;
+
     const docs = await listDocuments({
       limit: parseInt(limit || '20', 10),
       offset: parseInt(offset || '0', 10),
       status,
+      uploadedById: uploadedByFilter,
     });
     res.json({ success: true, count: docs.length, documents: docs });
   } catch (error) {
