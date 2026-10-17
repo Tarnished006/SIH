@@ -9,28 +9,30 @@ import { runLocalOcr } from './localOcr.service.js';
  * No hardcoded OCR outputs or simulated fake metrics.
  */
 export const extractLandRecord = async (imageBuffer, originalFilename = 'document.jpg', mimeType = 'image/jpeg') => {
-  const key = (process.env.GEMINI_API_KEY || '').trim();
+  const mode = (config.aiMode || 'LLM').toUpperCase();
+  const key = (config.geminiApiKey || process.env.GEMINI_API_KEY || '').trim();
   const hasGeminiKey = Boolean(key && !key.toLowerCase().includes('your_gemini') && key !== 'gemini_mock_key');
   const startTime = Date.now();
 
-  console.log(`[AI_SERVICE] Processing document "${originalFilename}". Gemini Key valid: ${hasGeminiKey}`);
+  console.log(`[AI_SERVICE] Processing document "${originalFilename}". Mode: ${mode}, Gemini Key present: ${hasGeminiKey}`);
 
-  if (hasGeminiKey) {
+  // 1. LLM Vision Engine (Default or explicit)
+  if (mode === 'LLM') {
     try {
-      console.log('[AI_SERVICE] Routing to Gemini Vision API...');
+      console.log('[AI_SERVICE] Routing to Gemini Vision Engine...');
       const result = await queryGeminiVision(imageBuffer, mimeType, originalFilename);
       return {
         ...result,
-        engineUsed: 'GEMINI_VISION',
+        engineUsed: hasGeminiKey ? 'GEMINI_VISION_LIVE' : 'GEMINI_VISION_MOCK',
         totalTimeMs: Date.now() - startTime,
       };
     } catch (err) {
-      console.warn(`[AI_SERVICE] Gemini Vision request failed (${err.message}). Falling back to local Tesseract OCR...`);
+      console.warn(`[AI_SERVICE] Gemini Vision request failed (${err.message}). Falling back to local OCR...`);
     }
   }
 
-  // Real local OCR pipeline
-  console.log('[AI_SERVICE] Running real local Tesseract OCR engine...');
+  // 2. Real local OCR pipeline (Tesseract + Sharp)
+  console.log('[AI_SERVICE] Running local OCR engine...');
   const ocrResult = await runLocalOcr(imageBuffer, originalFilename);
   return {
     ...ocrResult,

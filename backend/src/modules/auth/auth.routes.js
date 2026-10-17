@@ -15,8 +15,10 @@ const router = Router();
 
 // Public auth endpoints
 router.post('/login', login);
-router.post('/register', register);
 router.post('/refresh', refresh);
+
+// Admin-only user registration
+router.post('/register', authenticateJWT, requireRoles(['ADMIN']), register);
 
 // Protected session & profile endpoints
 router.post('/logout', authenticateJWT, logout);
