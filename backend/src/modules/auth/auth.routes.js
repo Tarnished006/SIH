@@ -8,7 +8,7 @@ import {
   listSessions,
   getProfile,
 } from './auth.controller.js';
-import { authenticateJWT } from '../../middleware/auth.middleware.js';
+import { authenticateJWT, optionalAuthenticateJWT } from '../../middleware/auth.middleware.js';
 import { requireRoles } from '../../middleware/rbac.middleware.js';
 
 const router = Router();
@@ -17,8 +17,8 @@ const router = Router();
 router.post('/login', login);
 router.post('/refresh', refresh);
 
-// Admin-only user registration
-router.post('/register', authenticateJWT, requireRoles(['ADMIN']), register);
+// User registration (Public for Citizen, Admin-controlled for Officials)
+router.post('/register', optionalAuthenticateJWT, register);
 
 // Protected session & profile endpoints
 router.post('/logout', authenticateJWT, logout);

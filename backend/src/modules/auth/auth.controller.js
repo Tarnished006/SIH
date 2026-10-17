@@ -34,7 +34,24 @@ export const register = async (req, res, next) => {
     if (!email || !password || !name) {
       return res.status(400).json({ success: false, error: 'Email, password, and name are required' });
     }
-    const user = await registerUser({ email, password, name, role, department, stateLgd, districtLgd });
+
+    // If an official token was provided, ensure only ADMIN can register officials
+    if (req.user && req.user.role !== 'ADMIN') {
+      return res.status(403).json({ success: false, error: 'Forbidden', message: 'Only administrators can register official accounts' });
+    }
+
+    // Public registration is strictly for CITIZEN role
+    const assignedRole = req.user?.role === 'ADMIN' && role ? role : 'CITIZEN';
+
+    const user = await registerUser({
+      email,
+      password,
+      name,
+      role: assignedRole,
+      department: department || 'Citizen Services',
+      stateLgd,
+      districtLgd,
+    });
     res.status(201).json({ success: true, user });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

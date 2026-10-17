@@ -41,4 +41,19 @@ export const authenticateJWT = async (req, res, next) => {
   }
 };
 
+export const optionalAuthenticateJWT = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next();
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, config.jwtSecret);
+    req.user = decoded;
+  } catch (err) {
+    // Silently ignore invalid token on optional endpoints
+  }
+  next();
+};
+
 export default authenticateJWT;
