@@ -31,6 +31,7 @@ export const createSession = async (user, { userAgent = '', ip = '' } = {}) => {
   const tokenPayload = {
     id: user.id,
     sessionId,
+    username: user.username || (user.email ? user.email.split('@')[0] : 'user'),
     email: user.email,
     name: user.name,
     role: user.role,
@@ -46,6 +47,7 @@ export const createSession = async (user, { userAgent = '', ip = '' } = {}) => {
 
   const sessionData = {
     sessionId,
+    username: user.username || (user.email ? user.email.split('@')[0] : 'user'),
     userId: user.id,
     email: user.email,
     role: user.role,
@@ -83,6 +85,7 @@ export const createSession = async (user, { userAgent = '', ip = '' } = {}) => {
     accessToken,
     refreshToken,
     sessionId,
+    username: user.username || (user.email ? user.email.split('@')[0] : 'user'),
     expiresIn: config.jwtAccessExpiresIn,
     user: tokenPayload,
   };

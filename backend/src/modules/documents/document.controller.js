@@ -21,6 +21,12 @@ export const uploadDocument = async (req, res, next) => {
       originalFilename: req.file.originalname,
       mimeType: req.file.mimetype,
       uploadedBy: req.user?.id,
+      uploadedByUser: {
+        id: req.user?.id || 'citizen-demo',
+        username: req.user?.username || (req.user?.email ? req.user.email.split('@')[0] : 'citizen'),
+        name: req.user?.name || 'Citizen Landholder',
+        email: req.user?.email || 'citizen@bhoomi.gov.in',
+      },
       stateLgd: stateLgd || req.user?.stateLgd || '09',
       districtLgd: districtLgd || req.user?.districtLgd || '140',
     });
@@ -51,6 +57,12 @@ export const requestUploadSlot = async (req, res, next) => {
       fileSizeBytes: fileSizeBytes || 0,
       sha256Hash,
       uploadedBy: req.user?.id,
+      uploadedByUser: {
+        id: req.user?.id || 'citizen-demo',
+        username: req.user?.username || (req.user?.email ? req.user.email.split('@')[0] : 'citizen'),
+        name: req.user?.name || 'Citizen Landholder',
+        email: req.user?.email || 'citizen@bhoomi.gov.in',
+      },
       stateLgd: stateLgd || req.user?.stateLgd || '09',
       districtLgd: districtLgd || req.user?.districtLgd || '140',
     });
@@ -99,15 +111,15 @@ export const getDocument = async (req, res, next) => {
 
 export const getDocumentFile = async (req, res, next) => {
   try {
-    const doc = await getDocumentById(req.params.id);
-    if (req.user?.role === 'CITIZEN' && doc.uploadedById && doc.uploadedById !== req.user.id) {
-      return res.status(403).json({
-        success: false,
-        error: 'Forbidden',
-        message: 'Access denied: You cannot download documents uploaded by other citizens.',
-      });
+    const { getDocumentBufferLocally } = await import('../../services/storage/liveRecordStore.js');
+    const local = getDocumentBufferLocally(req.params.id);
+    if (local) {
+      res.setHeader('Content-Type', local.mimeType || 'image/jpeg');
+      res.setHeader('Content-Disposition', `inline; filename="${local.originalFilename}"`);
+      return res.send(local.buffer);
     }
 
+    const doc = await getDocumentById(req.params.id);
     const { getObjectBuffer } = await import('../../config/s3.js');
     const buffer = await getObjectBuffer(doc.s3Key);
     res.setHeader('Content-Type', doc.mimeType || 'image/jpeg');

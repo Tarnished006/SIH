@@ -27,7 +27,11 @@ export const config = {
 
   // Google Gemini Vision Intelligence
   geminiApiKey: process.env.GEMINI_API_KEY || '',
-  geminiModel: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-flash-latest',
+
+  // Sarvam AI Sovereign Document Intelligence
+  sarvamApiKey: process.env.SARVAM_API_KEY || '',
+  aiProvider: (process.env.AI_PROVIDER || (process.env.SARVAM_API_KEY ? 'SARVAM' : 'GEMINI')).toUpperCase(),
 
   // Hugging Face AI Endpoints (Fine-Tuned Model)
   hfApiKey: process.env.HUGGINGFACE_API_KEY || '',

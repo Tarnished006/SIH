@@ -22,7 +22,7 @@ export const getRecord = async (req, res, next) => {
 
 export const getMyApplications = async (req, res, next) => {
   try {
-    const applications = await getUserApplications(req.user.id);
+    const applications = await getUserApplications(req.user.id, req.user?.email, req.user?.role);
     res.json({
       success: true,
       count: applications.length,
@@ -37,7 +37,7 @@ export const findRecords = async (req, res, next) => {
   try {
     // If role is CITIZEN, only return their own records
     if (req.user?.role === 'CITIZEN') {
-      const applications = await getUserApplications(req.user.id);
+      const applications = await getUserApplications(req.user.id, req.user?.email, req.user?.role);
       return res.json({ success: true, count: applications.length, records: applications });
     }
 

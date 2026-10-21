@@ -17,7 +17,7 @@ frontend/.env.*
 # Uploads and User data
 backend/uploads/*
 !backend/uploads/.gitkeep
-uploads/
+/uploads/
 
 # Logs
 logs/

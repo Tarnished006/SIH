@@ -52,13 +52,14 @@ export const operatorSubmit = async (req, res, next) => {
       });
     }
 
-    const { fieldDecisions, operatorRemarks, notes, manualArea } = req.body;
+    const { fieldDecisions, operatorRemarks, notes, manualArea, action } = req.body;
     const result = await submitOperatorReview({
       recordId: req.params.recordId,
       operatorId: req.user.id,
       fieldDecisions: fieldDecisions || [],
       operatorRemarks: operatorRemarks || notes || '',
       manualArea,
+      action: action || 'SUBMIT_TO_TEHSILDAR',
     });
 
     res.json({

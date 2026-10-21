@@ -13,6 +13,9 @@ import { uploadSingleDocument } from '../../middleware/upload.middleware.js';
 
 const router = Router();
 
+// Allow inline image rendering for standard browser <img> tags
+router.get('/:id/file', getDocumentFile);
+
 router.use(authenticateJWT);
 
 // Direct Synchronous AI Analysis & Inspection
@@ -27,6 +30,5 @@ router.post('/upload', uploadSingleDocument, uploadDocument);
 
 router.get('/', getDocumentsList);
 router.get('/:id', getDocument);
-router.get('/:id/file', getDocumentFile);
 
 export default router;

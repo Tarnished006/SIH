@@ -12,6 +12,11 @@ import {
 // In-memory registered users registry for session continuity across registration and login
 const inMemoryRegisteredUsers = new Map();
 
+export const generateDeterministicUserId = (email) => {
+  const h = crypto.createHash('md5').update(email.toLowerCase().trim()).digest('hex');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-a${h.slice(17, 20)}-${h.slice(20, 32)}`;
+};
+
 export const loginUser = async (email, password, { userAgent = '', ip = '' } = {}) => {
   const cleanEmail = email.toLowerCase().trim();
   let user = null;
@@ -45,7 +50,8 @@ export const loginUser = async (email, password, { userAgent = '', ip = '' } = {
       }
 
       user = {
-        id: '00000000-0000-0000-0000-000000000001',
+        id: generateDeterministicUserId(cleanEmail),
+        username: cleanEmail.split('@')[0],
         email: cleanEmail,
         name,
         role,
@@ -144,7 +150,8 @@ export const registerUser = async ({
     }
     console.warn(`[REGISTER_DB_FALLBACK] Database unreachable (${dbErr.message}). Granting resilient citizen registration.`);
     const fallbackUser = {
-      id: crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-0000-0000-' + Date.now().toString(16).padStart(12, '0'),
+      id: generateDeterministicUserId(cleanEmail),
+      username: cleanEmail.split('@')[0],
       email: cleanEmail,
       name: name.trim(),
       role: 'CITIZEN',

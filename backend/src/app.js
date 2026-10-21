@@ -18,7 +18,7 @@ import auditRoutes from './modules/audit/audit.routes.js';
 const app = express();
 
 // Security & utility middlewares
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] }));
 app.use(morgan(config.nodeEnv === 'development' ? 'dev' : 'combined'));
 app.use(express.json({ limit: '25mb' }));

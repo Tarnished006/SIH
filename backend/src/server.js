@@ -1,3 +1,6 @@
+import dns from 'dns';
+try { dns.setDefaultResultOrder('ipv4first'); } catch (e) {}
+
 import app from './app.js';
 import { config } from './config/env.js';
 import pool from './config/db.js';
@@ -7,7 +10,7 @@ const server = app.listen(config.port, () => {
   console.log('================================================================');
   console.log(`🚀 BhumiSetu Backend Service Running on http://localhost:${config.port}`);
   console.log(`📡 Environment: ${config.nodeEnv}`);
-  console.log(`🤖 AI Engine Mode: ${config.aiMode} (${config.aiMode === 'LLM' ? config.geminiModel : config.hfEndpointUrl})`);
+  console.log(`🤖 AI Engine Provider: ${config.aiProvider} (Sarvam AI Sovereign Vision & Gemini Vision)`);
   console.log(`🗺️ PostGIS Database URL: ${config.databaseUrl}`);
   console.log('================================================================');
 });
