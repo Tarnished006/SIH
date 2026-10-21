@@ -67,13 +67,13 @@ export const AuditLedgerPage = () => {
   };
 
   return (
-    <AppLayout title={language === 'kn' ? 'ಆಡಿಟ್ ಲೆಡ್ಜರ್' : 'Audit Ledger'} desktopExpanded={true}>
+    <AppLayout title={language === 'kn' ? 'ಅಧಿಕೃತ ಆಡಿಟ್ ದಾಖಲೆ' : 'Official Audit Trail'} desktopExpanded={true}>
       <div className="gov-page-container">
         {/* Header */}
         <div className="gov-page-header">
           <div>
             <h1 className="gov-page-title">
-              {language === 'kn' ? 'ಅಧಿಕೃತ ಆಡಿಟ್ ಲೆಡ್ಜರ್' : 'Cryptographic Audit Ledger'}
+              {language === 'kn' ? 'ಅಧಿಕೃತ ಆಡಿಟ್ ದಾಖಲೆ (Audit Trail)' : 'Official Tamper-Proof Audit Trail'}
             </h1>
             <p className="gov-page-subtitle">
               {language === 'kn'

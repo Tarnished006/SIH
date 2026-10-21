@@ -7,7 +7,7 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 15000,
+  timeout: 60000, // 60s timeout for multimodal AI inference
 });
 
 // Request Interceptor: Attach Access Token

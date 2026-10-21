@@ -40,11 +40,52 @@ export const DocumentUploadPage = () => {
     setIsProcessing(true);
     setErrorMsg(null);
     setUploadResult(null);
+
+    // Initial uploading state
     setProgressState({ 
       stage: 'UPLOADING', 
-      percent: 25, 
-      message: language === 'en' ? 'Uploading document to secure server...' : 'ದಾಖಲೆಯನ್ನು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...' 
+      percent: 20, 
+      message: language === 'en' 
+        ? 'Uploading document to secure server & auto-deskewing...' 
+        : 'ದಾಖಲೆಯನ್ನು ಸರ್ವರ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ ಮತ್ತು ಕೋನ ಸರಿಪಡಿಸಲಾಗುತ್ತಿದೆ...' 
     });
+
+    const timers = [];
+
+    // Stage 1: Sarvam Vision 2.1 sovereign extraction
+    timers.push(setTimeout(() => {
+      setProgressState({ 
+        stage: 'SARVAM_AI', 
+        percent: 45, 
+        message: language === 'en' 
+          ? 'Stage 1/2: Running Sovereign Sarvam AI Doc-AI (Kannada OCR & layout analysis)...' 
+          : 'ಹಂತ ೧/೨: ಸರ್ವಂ ಎಐ ಮೂಲಕ ಪಹಣಿ ಒಸಿಆರ್ ಮತ್ತು ರಚನೆ ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...' 
+      });
+    }, 2500));
+
+    // Stage 2: Gemini 2.5 Flash Adjudicator
+    timers.push(setTimeout(() => {
+      setProgressState({ 
+        stage: 'GEMINI_JUDGE', 
+        percent: 75, 
+        message: language === 'en' 
+          ? 'Stage 2/2: Gemini 2.5 Flash Adjudicator cross-verifying cursive handwriting & extent math...' 
+          : 'ಹಂತ ೨/೨: ಜೆಮಿನಿ ಫ್ಲ್ಯಾಶ್ ಮೂಲಕ ಕೈಬರಹ ಮತ್ತು ವಿಸ್ತೀರ್ಣ ಮೌಲ್ಯಮಾಪನ ಮಾಡಲಾಗುತ್ತಿದೆ...' 
+      });
+    }, 12000));
+
+    // Stage 3: Consensus & Bhu-Aadhaar ULPIN
+    timers.push(setTimeout(() => {
+      setProgressState({ 
+        stage: 'FINALIZING', 
+        percent: 92, 
+        message: language === 'en' 
+          ? 'Finalizing dual-model consensus & generating provisional Bhu-Aadhaar ULPIN...' 
+          : 'ಅಂತಿಮ ಪರಿಶೀಲನೆ ಹಾಗೂ ಭೂ-ಆಧಾರ್ ಯುಎಲ್‌ಪಿಐಎನ್ ರಚಿಸಲಾಗುತ್ತಿದೆ...' 
+      });
+    }, 24000));
+
+    const clearAllTimers = () => timers.forEach(t => clearTimeout(t));
 
     const formData = new FormData();
     formData.append('document', selectedFile);
@@ -53,7 +94,10 @@ export const DocumentUploadPage = () => {
       // 1. Upload to backend
       const uploadRes = await apiClient.post('/documents/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 90000, // 90s for multimodal vision inference
       });
+
+      clearAllTimers();
 
       if (!uploadRes.data?.success) {
         throw new Error(uploadRes.data?.error || 'Document upload failed');
@@ -72,6 +116,24 @@ export const DocumentUploadPage = () => {
           documentId,
           isDuplicate: true,
           message: uploadRes.data.message || 'This document has already been uploaded previously.',
+        });
+        setIsProcessing(false);
+        return;
+      }
+
+      // Fast-path: If synchronous Gemini Vision / Dual-Model already produced the record
+      if (uploadRes.data?.record && uploadRes.data?.recordId) {
+        setProgressState({ 
+          stage: 'DONE', 
+          percent: 100, 
+          message: language === 'en' 
+            ? 'Dual-Model Consensus Verified & Ingested Successfully.' 
+            : 'ಉಭಯ-ಮಾದರಿ ಒಮ್ಮತ ಪರಿಶೀಲನೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ.' 
+        });
+        setUploadResult({
+          documentId,
+          record: uploadRes.data.record,
+          recordId: uploadRes.data.recordId,
         });
         setIsProcessing(false);
         return;
@@ -115,6 +177,7 @@ export const DocumentUploadPage = () => {
         recordId: foundRecord?.id,
       });
     } catch (err) {
+      clearAllTimers();
       console.error('[INGESTION_ERROR]', err);
       const msg = err.response?.data?.message || err.response?.data?.error || err.message || 'Upload failed';
       setErrorMsg(msg);

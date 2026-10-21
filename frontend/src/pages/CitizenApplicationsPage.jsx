@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 import apiClient from '../api/client';
 import { Search, ChevronRight, FileText, CheckCircle2, Clock, AlertCircle, PlusCircle, RefreshCw, XCircle } from 'lucide-react';
 
 export const CitizenApplicationsPage = () => {
   const { language } = useLanguage();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -305,13 +307,32 @@ export const CitizenApplicationsPage = () => {
                         )}
                       </td>
                       <td style={{ textAlign: 'right' }}>
-                        <button
-                          className="gov-table-action-btn"
-                          onClick={() => navigate(`/records/${app.id}`)}
-                        >
-                          <span>{language === 'kn' ? 'ಪೂರ್ಣ ವಿವರ' : 'View Record'}</span>
-                          <ChevronRight size={12} />
-                        </button>
+                        {app.reviewStatus === 'CORRECTIONS_REQUESTED' ? (
+                          <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                            <button
+                              className="gov-table-action-btn"
+                              style={{ backgroundColor: '#fef3c7', color: '#b45309', borderColor: '#fcd34d' }}
+                              onClick={() => navigate('/upload')}
+                            >
+                              <span>{language === 'kn' ? 'ಮರು-ಅಪ್‌ಲೋಡ್' : 'Re-upload Scan'}</span>
+                            </button>
+                            <button
+                              className="gov-table-action-btn"
+                              onClick={() => navigate(`/records/${app.id}`)}
+                            >
+                              <span>{language === 'kn' ? 'ವಿವರ' : 'Details'}</span>
+                              <ChevronRight size={12} />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="gov-table-action-btn"
+                            onClick={() => navigate(`/records/${app.id}`)}
+                          >
+                            <span>{language === 'kn' ? 'ಪೂರ್ಣ ವಿವರ' : 'View Record'}</span>
+                            <ChevronRight size={12} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );

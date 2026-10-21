@@ -85,8 +85,8 @@ export const DesktopSidebar = () => {
             id: 'audit',
             path: '/audit',
             icon: ShieldCheck,
-            labelEn: 'Audit Ledger',
-            labelKn: 'ಆಡಿಟ್ ಲೆಡ್ಜರ್',
+            labelEn: 'Official Audit Trail',
+            labelKn: 'ಅಧಿಕೃತ ಆಡಿಟ್ ದಾಖಲೆ',
           },
         ];
 
@@ -111,8 +111,8 @@ export const DesktopSidebar = () => {
             id: 'audit',
             path: '/audit',
             icon: ShieldCheck,
-            labelEn: 'Audit Ledger',
-            labelKn: 'ಆಡಿಟ್ ಲೆಡ್ಜರ್',
+            labelEn: 'Official Audit Trail',
+            labelKn: 'ಅಧಿಕೃತ ಆಡಿಟ್ ದಾಖಲೆ',
           },
         ];
     }

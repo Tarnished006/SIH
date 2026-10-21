@@ -153,7 +153,7 @@ export const ReviewQueuePage = () => {
               type="text"
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              placeholder={language === 'en' ? 'Search by Survey No, Village, Application No...' : 'ಸರ್ವೆ ನಂ, ಗ್ರಾಮ ಅಥವಾ ಅರ್ಜಿ ನಂ ಹುಡುಕಿ...'}
+              placeholder={language === 'en' ? 'Search by Survey No, Village, App No, or Citizen Username (@username)...' : 'ಸರ್ವೆ ನಂ, ಗ್ರಾಮ, ಅಥವಾ ನಾಗರಿಕರ ಬಳಕೆದಾರ ಹೆಸರು (@username)...'}
               style={{
                 width: '100%',
                 padding: '9px 12px 9px 36px',
@@ -209,6 +209,7 @@ export const ReviewQueuePage = () => {
             <thead>
               <tr>
                 <th>{language === 'en' ? 'Application / Record' : 'ಅರ್ಜಿ ಸಂಖ್ಯೆ'}</th>
+                <th>{language === 'en' ? 'Citizen Account' : 'ನಾಗರಿಕರ ಖಾತೆ'}</th>
                 <th>{language === 'en' ? 'Survey No & Village' : 'ಸರ್ವೆ ನಂ & ಗ್ರಾಮ'}</th>
                 <th>{language === 'en' ? 'Area / Extent' : 'ವಿಸ್ತೀರ್ಣ'}</th>
                 <th>{language === 'en' ? 'OCR Confidence' : 'ಎಐ ನಿಖರತೆ'}</th>
@@ -220,13 +221,13 @@ export const ReviewQueuePage = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)' }}>
                     {language === 'en' ? 'Loading review cases from database...' : 'ಪ್ರಕರಣಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...'}
                   </td>
                 </tr>
               ) : filteredQueue.length === 0 ? (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '40px 16px', color: 'var(--text-muted)' }}>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '40px 16px', color: 'var(--text-muted)' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                       <CheckCircle2 size={28} color="var(--color-success)" />
                       <div style={{ fontWeight: 600 }}>
